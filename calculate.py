@@ -12,7 +12,7 @@ from scipy.special import dawsn
 # SI constants. Ion masses below are explicitly defined in atomic mass units.
 kB = 1.380649e-23
 e = 1.602176634e-19
-eps0 = 8.8541878128e-12
+eps0 = 8.8541878188e-12
 me = 9.1093837139e-31
 amu = 1.66053906892e-27
 c = 299792458.0
