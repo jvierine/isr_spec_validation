@@ -8,6 +8,7 @@ from pathlib import Path
 import h5py
 import numpy as np
 from scipy.special import dawsn
+from metadata import attach
 
 # SI constants. Ion masses below are explicitly defined in atomic mass units.
 kB = 1.380649e-23
@@ -68,13 +69,16 @@ def write_tables():
                                     for species, mass, fraction in ions)
             header = (f'{name}; radar {radar_mhz:g} MHz; ne {ne:g} m^-3; Ti {ti:g} K; Te {te:g} K\n'
                       f'{composition}\n'
-                      'B = 0 T; collision rates = 0 s^-1; bulk velocity = 0 m/s\n'
+                      f'f_r = {radar_mhz:g} MHz; vi = 0 m/s; ve = 0 m/s; B = 0 T\n'
+                      'nu_en = 0 s^-1; nu_ei = 0 s^-1; nu_in = 0 s^-1\n'
+                      'angle(k,B) = 0 deg (ignored at B=0); collisionless\n'
                       'S_ion, S_electron, S_total: Hz^-1 per electron; not normalized to unit area\n'
                       'frequency_Hz          S_ion             S_electron        S_total')
             np.savetxt(directory / f'{stem}.txt',
                        np.column_stack([FREQUENCY_HZ, ion, electron, total]),
                        fmt=['%12.1f', '% .12e', '% .12e', '% .12e'], header=header)
             with h5py.File(directory / f'{stem}.h5', 'w') as h:
+                attach(h, dict(ne=ne,ti=ti,te=te,ions=ions,radar_hz=radar_mhz*1e6,B=0.,theta=0.))
                 h.attrs['radar_frequency_hz'] = radar_mhz * 1e6
                 h.attrs['electron_density_m3'] = ne
                 h.attrs['ion_temperature_k'] = ti

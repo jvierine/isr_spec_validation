@@ -1,6 +1,8 @@
 # topside; radar 440.2 MHz; ne 5e+10 m^-3; Ti 1500 K; Te 3000 K
 # O+: 0.5 at 16 u; H+: 0.5 at 1 u
-# B = 0 T; collision rates = 0 s^-1; bulk velocity = 0 m/s
+# f_r = 440.2 MHz; vi = 0 m/s; ve = 0 m/s; B = 0 T
+# nu_en = 0 s^-1; nu_ei = 0 s^-1; nu_in = 0 s^-1
+# angle(k,B) = 0 deg (ignored at B=0); collisionless
 # S_ion, S_electron, S_total: Hz^-1 per electron; not normalized to unit area
 # frequency_Hz          S_ion             S_electron        S_total
    -100000.0  1.059037326408e-25  3.952292259431e-09  3.952292259431e-09
