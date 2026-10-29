@@ -9,6 +9,7 @@ import h5py
 import numpy as np
 from scipy.special import dawsn
 from metadata import attach
+from provenance import source_info, stamp
 
 # SI constants. Ion masses below are explicitly defined in atomic mass units.
 kB = 1.380649e-23
@@ -57,6 +58,7 @@ def spectrum(radar_hz, ne, ti, te, ions, frequency_hz):
 
 
 def write_tables():
+    provenance = source_info(Path(__file__))
     directory = Path(__file__).parent / 'tables'
     directory.mkdir(exist_ok=True)
     for radar_mhz in [440.2, 930.0]:
@@ -72,6 +74,9 @@ def write_tables():
                       f'f_r = {radar_mhz:g} MHz; vi = 0 m/s; ve = 0 m/s; B = 0 T\n'
                       'nu_en = 0 s^-1; nu_ei = 0 s^-1; nu_in = 0 s^-1\n'
                       'angle(k,B) = 0 deg (ignored at B=0); collisionless\n'
+                      f'git_url = {provenance["git_url"]}\n'
+                      f'git_commit = {provenance["git_commit"]}\n'
+                      f'code_path = {provenance["code_path"]}\n'
                       'S_ion, S_electron, S_total: Hz^-1 per electron; not normalized to unit area\n'
                       'frequency_Hz          S_ion             S_electron        S_total')
             np.savetxt(directory / f'{stem}.txt',
@@ -93,6 +98,7 @@ def write_tables():
                 for key, values in [('S_ion', ion), ('S_electron', electron), ('S_total', total)]:
                     h[key] = values
                     h[key].attrs['units'] = 'Hz^-1 per electron'
+                stamp(h, {'Analytic': provenance}, 'calculate.py')
 
 
 if __name__ == '__main__':

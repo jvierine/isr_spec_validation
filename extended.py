@@ -8,12 +8,14 @@ import scipy
 from compare import (ROOT, JUHA_REV, JOHN_REV, source, load_juha, vierinen,
                      swoboda, ours, error, calculate)
 from metadata import attach
+from provenance import sources, stamp
 
 
 def main():
     juha = load_juha(source('https://github.com/jvierine/isr_analysis', JUHA_REV, 'vierinen')/'isr_spec.py')
     john = source('https://github.com/jswoboda/ISRSpectrum', JOHN_REV, 'swoboda')
     sys.path.insert(0, str(john))
+    provenance = sources()
     from ISRSpectrum.ISRSpectrum import Specinit
     directory = ROOT/'tables'/'extended'
     directory.mkdir(exist_ok=True)
@@ -52,6 +54,7 @@ def main():
             for name,array in values.items():
                 attach(h.create_group(name),case)
                 for component,a in zip(['S_ion','S_electron','S_total'],array): h[name+'/'+component]=a
+            stamp(h, {n:provenance[n] for n in names}, 'extended.py')
         records.append((case['name'],names,matrix,convergence))
         print(names,matrix,'convergence',convergence,flush=True)
     lines=['# Additional comparisons','', 'Same metric and 10⁻⁶ threshold as the README. Angles here are measured from B.','']

@@ -6,6 +6,7 @@ import h5py
 import numpy as np
 from compare import ROOT, load_juha, vierinen, swoboda, error
 from metadata import attach
+from provenance import sources, read_sources, stamp
 
 
 def main():
@@ -13,6 +14,7 @@ def main():
     ap.add_argument('--case')
     ap.add_argument('--john-only',action='store_true')
     args=ap.parse_args()
+    provenance=sources()
     juha=load_juha(ROOT/'.cache/vierinen/isr_spec.py')
     original=juha.gordoyev2
     def longer(*args,**kwargs):
@@ -39,6 +41,8 @@ def main():
         with h5py.File(path,'r+') as h:
             case=json.loads(h.attrs['parameters_json'])
             case['frequency_hz']=h['frequency_hz'][:]
+            used_sources=read_sources(h)
+            used_sources['Swoboda']=provenance['Swoboda']
             values={'Kinetic':np.array([h['Kinetic/'+x][:] for x in ['S_ion','S_electron','S_total']])}
             refinement=4
             low=swoboda(Specinit,case)
@@ -52,9 +56,11 @@ def main():
             jc=np.nan
             if 'Vierinen' in h:
                 if args.john_only:
+                    used_sources['Vierinen']=read_sources(h['refined'])['Vierinen']
                     values['Vierinen']=np.array([h['refined/Vierinen/'+x][:] for x in ['S_ion','S_electron','S_total']])
                     jc=h['refined'].attrs['vierinen_convergence_total']
                 else:
+                    used_sources['Vierinen']=provenance['Vierinen']
                     low=vierinen(juha,case,80000)
                     values['Vierinen']=vierinen(juha,case,160000)
                     jc=error(low[-1],values['Vierinen'][-1])
@@ -78,6 +84,7 @@ def main():
             for n,v in values.items():
                 attach(g.create_group(n),case)
                 for component,a in zip(['S_ion','S_electron','S_total'],v): g[n+'/'+component]=a
+            stamp(g, {n:used_sources[n] for n in names}, 'refine.py')
             print(names,matrix,'convergence',sc,jc,flush=True)
 
 

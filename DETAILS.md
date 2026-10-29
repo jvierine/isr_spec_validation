@@ -14,6 +14,14 @@ into an ignored `.cache/` directory. They do not change those upstream files.
 The recorded baseline run used SciPy 1.17.1. Exact versions and source hashes
 are stored in the baseline HDF5 files.
 
+Each HDF5 code table and spectrum carries `git_url`, `git_commit` (full checkout
+hash), `code_path` and `code_sha256`. The `/provenance` group lists every code
+used; `generator_git_*` attributes identify the adapter/generator checkout.
+The existing text tables include the URL and full commit in their headers.
+Generation rejects uncommitted Python source changes and mismatched upstream
+checkouts. The Kinetic code is identified by its tracked snapshot in this
+repository, since its original workspace was not a Git repository.
+
 The original test definitions and analytical equations are in [METHODS.md](METHODS.md).
 The local kinetic implementation is preserved verbatim in `models/kinetic.py`;
 it was copied from the Vlasov–Boltzmann project's `isr/kinetic.py`.

@@ -1,12 +1,45 @@
 """Check saved tables, recompute every pairwise metric, and check baseline gates."""
 import h5py
 import numpy as np
+import hashlib
+import re
+import subprocess
 from compare import error, NAMES, TOL, ROOT
 
 REQUIRED=['ne_m3','te_K','ti_K','vi_m_s','B_T','nu_en_s_1','nu_ei_s_1','nu_in_s_1','angle_k_B_deg','f_r_MHz']
 
 
+def verify_provenance():
+    repos={'Analytic':ROOT,'Kinetic':ROOT,'Vierinen':ROOT/'.cache/vierinen',
+           'Swoboda':ROOT/'.cache/swoboda'}
+    for path in sorted((ROOT/'tables').rglob('*.h5')):
+        with h5py.File(path) as h:
+            for group in [h]+([h['refined']] if 'refined' in h else []):
+                assert 'provenance' in group, (path,group.name)
+                assert re.fullmatch('[0-9a-f]{40}',group.attrs['generator_git_commit'])
+                assert group.attrs['generator_git_url']
+                for name,record in group['provenance'].items():
+                    attrs=record.attrs
+                    assert re.fullmatch('[0-9a-f]{40}',attrs['git_commit'])
+                    assert attrs['git_url'] and attrs['code_checkout_clean']
+                    url=subprocess.check_output(['git','-C',str(repos[name]),'remote','get-url','origin'],text=True).strip()
+                    assert attrs['git_url']==url,(path,name)
+                    code=subprocess.check_output(['git','-C',str(repos[name]),'show',attrs['git_commit']+':'+attrs['code_path']])
+                    assert hashlib.sha256(code).hexdigest()==attrs['code_sha256'],(path,name)
+            def check_spectrum(name,obj):
+                if isinstance(obj,h5py.Dataset) and name.split('/')[-1] in ['S_ion','S_electron','S_total']:
+                    assert obj.attrs['git_url']
+                    assert re.fullmatch('[0-9a-f]{40}',obj.attrs['git_commit'])
+            h.visititems(check_spectrum)
+            if path.parent==ROOT/'tables':
+                header=path.with_suffix('.txt').read_text().splitlines()[:12]
+                assert '# git_url = '+h.attrs['git_url'] in header
+                assert '# git_commit = '+h.attrs['git_commit'] in header
+    print('All HDF5 tables, spectra and text headers: Git URLs, full checkout commits and committed source hashes verified.')
+
+
 def main():
+    verify_provenance()
     worst=np.zeros((4,4))
     count=0
     for path in sorted((ROOT/'tables/comparison').glob('*.h5')):

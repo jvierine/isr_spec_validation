@@ -20,6 +20,7 @@ from scipy import constants as c, integrate
 import calculate
 from models import kinetic
 from metadata import attach
+from provenance import sources, stamp
 
 ROOT = Path(__file__).resolve().parent
 JUHA_REV = '9c743981bc9e0340a219dfac4685509a38d7f93d'
@@ -104,6 +105,7 @@ def main():
     args = ap.parse_args()
     jp = args.juha or source('https://github.com/jvierine/isr_analysis', JUHA_REV, 'vierinen') / 'isr_spec.py'
     sp = args.john or source('https://github.com/jswoboda/ISRSpectrum', JOHN_REV, 'swoboda')
+    provenance = sources(jp, sp)
     juha = load_juha(jp)
     sys.path.insert(0, str(sp))
     from ISRSpectrum.ISRSpectrum import Specinit
@@ -154,6 +156,7 @@ def main():
             h['Vierinen_10000_points'] = low
             h['Vierinen_convergence_error'] = conv
             h['Swoboda_unconverted_mass_input'] = rawmass
+            stamp(h, provenance, 'compare.py')
         print('maximum pairwise:', np.max(matrix), 'quadrature:', max(conv), flush=True)
     with h5py.File(outdir/'summary.h5', 'w') as h:
         for case in cases: attach(h.create_group('case_parameters/'+case['name']),case)
@@ -164,6 +167,7 @@ def main():
         h['vierinen_convergence_error'] = convergence
         h['unconverted_swoboda_mass_error'] = mass_errors
         h.attrs['pass_tolerance'] = TOL
+        stamp(h, provenance, 'compare.py')
     print('MATRIX', worst, 'COMPONENT MAX', np.max(components), 'MASS', mass_errors, flush=True)
     write_readme(worst)
 
@@ -186,7 +190,7 @@ def write_readme(matrix):
         lines.append('| '+name+' | '+' | '.join(cells)+' |')
     lines += ['', '[HDF5 tables](tables/comparison/) contain every code’s spectrum and comparison results.',
               'Mass units, spectrum units and zero-frequency limits are matched explicitly;',
-              '[details and reproduction](DETAILS.md).', '',
+              '[details and reproduction](DETAILS.md). Each table includes its code’s Git URL and full checkout commit.', '',
               'Magnetic, collision and plasma-line checks: [initial and refined results](EXTENDED_RESULTS.md).', '']
     (ROOT/'README.md').write_text('\n'.join(lines))
 
