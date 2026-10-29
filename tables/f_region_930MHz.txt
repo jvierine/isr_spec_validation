@@ -3,6 +3,9 @@
 # f_r = 930 MHz; vi = 0 m/s; ve = 0 m/s; B = 0 T
 # nu_en = 0 s^-1; nu_ei = 0 s^-1; nu_in = 0 s^-1
 # angle(k,B) = 0 deg (ignored at B=0); collisionless
+# git_url = git@github.com:jvierine/isr_spec_validation.git
+# git_commit = 52652820dd10ad248cefffc10cc43a36eb803cd6
+# code_path = calculate.py
 # S_ion, S_electron, S_total: Hz^-1 per electron; not normalized to unit area
 # frequency_Hz          S_ion             S_electron        S_total
    -100000.0  1.905429610323e-113  5.622104783516e-09  5.622104783516e-09

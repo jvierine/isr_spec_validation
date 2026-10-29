@@ -24,6 +24,6 @@ divided by the larger spectrum peak. No fitted scaling.
 
 [HDF5 tables](tables/comparison/) contain every code’s spectrum and comparison results.
 Mass units, spectrum units and zero-frequency limits are matched explicitly;
-[details and reproduction](DETAILS.md).
+[details and reproduction](DETAILS.md). Each table includes its code’s Git URL and full checkout commit.
 
 Magnetic, collision and plasma-line checks: [initial and refined results](EXTENDED_RESULTS.md).

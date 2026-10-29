@@ -23,7 +23,9 @@ def verify_provenance():
                     assert re.fullmatch('[0-9a-f]{40}',attrs['git_commit'])
                     assert attrs['git_url'] and attrs['code_checkout_clean']
                     url=subprocess.check_output(['git','-C',str(repos[name]),'remote','get-url','origin'],text=True).strip()
-                    assert attrs['git_url']==url,(path,name)
+                    # HTTPS and SSH clone URLs can identify the same repository.
+                    canonical=lambda u: re.sub(r'^git@([^:]+):',r'https://\1/',u).rstrip('/').removesuffix('.git')
+                    assert canonical(attrs['git_url'])==canonical(url),(path,name)
                     code=subprocess.check_output(['git','-C',str(repos[name]),'show',attrs['git_commit']+':'+attrs['code_path']])
                     assert hashlib.sha256(code).hexdigest()==attrs['code_sha256'],(path,name)
             def check_spectrum(name,obj):
