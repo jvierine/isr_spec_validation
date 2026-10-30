@@ -40,7 +40,7 @@ def case_lines(path):
                'Upper panel: absolute spectrum per electron. Lower panel: absolute difference from Kinetic, divided by its peak. '
                'Ion-line views focus on the spectral feature; full grids are retained in HDF5. '
                'The plasma-line view leaves the unsampled central interval blank. Residuals below 10⁻¹⁶ are clipped to that plotting floor.','',
-               '| Code | Difference from Kinetic | Refinement change |','|---|---:|---:|']
+               '| Code | Difference from Kinetic | Refinement change | Symmetry error |','|---|---:|---:|---:|']
         reference=h['Kinetic/S_total'][:]
         for name in NAMES:
             if name not in h: continue
@@ -48,10 +48,11 @@ def case_lines(path):
             conv=g.attrs.get('convergence_error')
             refine=f'{conv:.2e}' if conv is not None else '—'
             if conv is not None and conv>1e-6: refine+=' (unresolved)'
-            lines.append(f'| {name} | {"reference" if name=="Kinetic" else value(diff)} | {refine} |')
+            lines.append(f'| {name} | {"reference" if name=="Kinetic" else value(diff)} | {refine} | {value(g.attrs["symmetry_error"])} |')
         lines+=['','A dash means no new refinement measurement in this run; it does not establish numerical convergence. '
                 'A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. '
-                'The refinement column compares the two recorded numerical settings.','',
+                'The refinement column compares the two recorded numerical settings. '
+                'Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.','',
                 f'[Spectrum arrays and full pairwise matrix](tables/expanded/{path.name}) · [Vector figure](figures/{path.stem}.svg)','',
                 '| Unavailable code | Status | Reason |','|---|---|---|']
         for name,g in h['availability'].items():

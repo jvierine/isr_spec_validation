@@ -118,6 +118,7 @@ def collect():
                         if 'S_total' not in h[name]: raise ValueError(name)
             arrays=[h[n+'/S_total'][:] for n in names]
             assert all(a.shape==case['frequency_hz'].shape and np.isfinite(a).all() for a in arrays)
+            for n,a in zip(names,arrays): h[n].attrs['symmetry_error']=error(a,a[::-1])
             h['code_names']=np.array(names,dtype=h5py.string_dtype())
             h['pairwise_error']=np.array([[error(a,b) for b in arrays] for a in arrays])
             h.attrs['pass_tolerance']=1e-6

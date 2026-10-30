@@ -64,6 +64,8 @@ are `(1e-16,262144,100,128,16)`. For plasma lines, evaluate a full uniform grid
 and select the exact requested samples. Disable the unneeded ACF calculation.
 Native complex64 ion-response arrays are retained; quadrature refinement alone
 does not establish freedom from floating-point error.
+The plasma-line result also has a small numerical asymmetry, quantified in
+the case table. Spectra are never symmetrized to conceal this error.
 
 **Skolar.** Invoke the upstream Maxwellian harmonic formulas `calcU_Maxwellian`,
 `calcM_Maxwellian`, `calcChi_Maxwellian`, then `calcSpectra`. Masses are kg,
@@ -146,6 +148,6 @@ a system HDF5 library; LaTeX labels need the TeX tools used by Rustplotlib.
 Collection refuses stale adapter/source hashes. Expanded metadata includes
 source URLs, full commits, source hashes, adapter hashes and runtime versions,
 plus source-generator identifiers for imported original arrays. Verification
-checks exact reuse of original grids and arrays, finite nonnegative symmetric
-spectra, all pairwise metrics, refinement calculations, coverage and figure
+checks exact reuse of original grids and arrays, finite nonnegative
+spectra, measured symmetry and pairwise metrics, refinement calculations, coverage and figure
 files. It checks internal consistency without requiring every code to agree.

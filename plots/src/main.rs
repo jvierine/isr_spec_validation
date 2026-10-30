@@ -37,8 +37,10 @@ fn main() -> Result<()> {
         let xlabel=if plasma {r"$f\;[\mathrm{MHz}]$"} else {r"$f\;[\mathrm{kHz}]$"};
         let mut top=Panel::new(Rect::new(25.,34.,145.,57.),Axes::new([-limit/divisor,limit/divisor],[0.,ymax],xlabel,r"$S(f)\;[10^{-6}\,\mathrm{Hz}^{-1}\,\mathrm{electron}^{-1}]$"));
         let maxerr=series.iter().flat_map(|(_,v)|v.iter().zip(&reference).map(|(a,b)|(a-b).abs()/peak)).fold(1e-6_f64,f64::max);
-        let mut axes=Axes::new([-limit/divisor,limit/divisor],[1e-16,10_f64.powf(maxerr.log10().ceil())],xlabel,r"$|S-S_{\rm Kinetic}|/\max S_{\rm Kinetic}$");
+        let mut axes=Axes::new([-limit/divisor,limit/divisor],[1e-16,10_f64.powf(maxerr.log10().ceil())],xlabel,r"$|\Delta S|/S_{\max}$");
         axes.set_yscale(AxisScale::Log10)?;
+        axes.yticks=vec![1e-16,1e-12,1e-8,1e-4,1.].into_iter().filter(|y| *y<=axes.ylim[1]).collect();
+        axes.yticklabels=Some(axes.yticks.iter().map(|y|format!("$10^{{{:.0}}}$",y.log10())).collect());
         let mut bottom=Panel::new(Rect::new(25.,112.,145.,28.),axes);
         let mut entries=Vec::new();
         let step=f.windows(2).map(|p|p[1]-p[0]).fold(f64::INFINITY,f64::min);

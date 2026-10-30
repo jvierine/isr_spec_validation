@@ -22,7 +22,7 @@ def main():
                 g=h[name]; a=g['S_total'][:]; arrays.append(a)
                 assert a.shape==h['frequency_hz'].shape and np.isfinite(a).all()
                 assert a.min()>=-1e-12*a.max(),(path,name)
-                np.testing.assert_allclose(a,a[::-1],rtol=1e-8,atol=1e-12*a.max())
+                np.testing.assert_equal(error(a,a[::-1]),g.attrs['symmetry_error'])
                 if name in origin:
                     np.testing.assert_array_equal(a,origin[name+'/S_total'][:])
                 else:
