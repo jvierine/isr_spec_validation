@@ -27,3 +27,7 @@ Mass units, spectrum units and zero-frequency limits are matched explicitly;
 [details and reproduction](DETAILS.md). Each table includes its code’s Git URL and full checkout commit.
 
 Magnetic, collision and plasma-line checks: [pass/fail results](EXTENDED_RESULTS.md).
+
+Other available calculators: [catalog of ISR spectrum software](OTHER_CODES.md),
+including GitHub implementations and Zenodo/DataverseNO archives. Catalog entries
+have not been added to the numerical comparisons.

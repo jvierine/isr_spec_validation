@@ -191,7 +191,10 @@ def write_readme(matrix):
     lines += ['', '[HDF5 tables](tables/comparison/) contain every code’s spectrum and comparison results.',
               'Mass units, spectrum units and zero-frequency limits are matched explicitly;',
               '[details and reproduction](DETAILS.md). Each table includes its code’s Git URL and full checkout commit.', '',
-              'Magnetic, collision and plasma-line checks: [pass/fail results](EXTENDED_RESULTS.md).', '']
+              'Magnetic, collision and plasma-line checks: [pass/fail results](EXTENDED_RESULTS.md).', '',
+              'Other available calculators: [catalog of ISR spectrum software](OTHER_CODES.md),',
+              'including GitHub implementations and Zenodo/DataverseNO archives. Catalog entries',
+              'have not been added to the numerical comparisons.', '']
     (ROOT/'README.md').write_text('\n'.join(lines))
 
 
