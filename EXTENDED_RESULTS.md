@@ -18,7 +18,7 @@ Upper panel: absolute spectrum per electron. Lower panel: absolute difference fr
 | Buchert | 🟥 3.87e-05 | — | 🟩 0.00e+00 |
 | Nicolls | 🟩 8.74e-08 | 1.02e-14 | 🟩 9.40e-17 |
 | Skolar | 🟩 1.33e-11 | 1.19e-10 | 🟩 3.85e-15 |
-| inscar | 🟥 1.12e-05 | 1.54e-08 | 🟩 0.00e+00 |
+| inscar | 🟩 1.18e-13 | 9.18e-14 | 🟩 0.00e+00 |
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
@@ -29,6 +29,8 @@ A dash means no new refinement measurement in this run; it does not establish nu
 | Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 | Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 | Virtanen | ['unsupported'] | ['No oblique magnetic response; parallel Maxwellian case is identical to the unmagnetized response.'] |
+
+inscar independent checks: cutoff refinement 4.36e-14; DC-limit sensitivity 1.34e-13. The grid-refinement measurement is shown above.
 
 ## Magnetic field, 85° from B
 
@@ -46,7 +48,7 @@ Upper panel: absolute spectrum per electron. Lower panel: absolute difference fr
 | Buchert | 🟥 1.31e-03 | — | 🟩 0.00e+00 |
 | Nicolls | 🟥 4.10e-06 | 1.05e-14 | 🟩 4.30e-17 |
 | Skolar | 🟩 1.21e-11 | 1.09e-10 | 🟩 5.42e-15 |
-| inscar | 🟥 1.02e-05 | 5.96e-08 | 🟩 0.00e+00 |
+| inscar | 🟩 5.79e-14 | 6.48e-14 | 🟩 0.00e+00 |
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
@@ -57,6 +59,8 @@ A dash means no new refinement measurement in this run; it does not establish nu
 | Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 | Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 | Virtanen | ['unsupported'] | ['No oblique magnetic response; parallel Maxwellian case is identical to the unmagnetized response.'] |
+
+inscar independent checks: cutoff refinement 3.47e-14; DC-limit sensitivity 8.86e-14. The grid-refinement measurement is shown above.
 
 ## Neutral BGK collisions, 42° from B
 
@@ -130,7 +134,7 @@ Upper panel: absolute spectrum per electron. Lower panel: absolute difference fr
 | Virtanen | 🟥 4.22e-04 | — | 🟩 0.00e+00 |
 | Nicolls | 🟥 3.41e-04 | 9.68e-07 | 🟥 1.75e-06 |
 | Skolar | 🟩 3.68e-12 | 1.32e-11 | 🟩 0.00e+00 |
-| inscar | 🟥 1.93e-01 | 7.07e-04 (unresolved) | 🟩 0.00e+00 |
+| inscar | 🟩 1.30e-08 | 3.73e-08 | 🟩 0.00e+00 |
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
@@ -140,3 +144,5 @@ A dash means no new refinement measurement in this run; it does not establish nu
 |---|---|---|
 | Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 | Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
+
+inscar independent checks: cutoff refinement 1.88e-08; DC-limit sensitivity 0.00e+00. The grid-refinement measurement is shown above.

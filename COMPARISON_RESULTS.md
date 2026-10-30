@@ -20,7 +20,7 @@ Upper panel: absolute spectrum per electron. Lower panel: absolute difference fr
 | Virtanen | 🟥 1.46e-05 | — | 🟩 0.00e+00 |
 | Nicolls | 🟩 1.55e-07 | 2.32e-14 | 🟩 3.39e-15 |
 | Skolar | 🟩 7.97e-12 | 7.17e-11 | 🟩 0.00e+00 |
-| inscar | 🟥 9.81e-05 | 2.69e-08 | 🟩 0.00e+00 |
+| inscar | 🟩 9.88e-14 | 7.77e-14 | 🟩 0.00e+00 |
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
@@ -30,6 +30,8 @@ A dash means no new refinement measurement in this run; it does not establish nu
 |---|---|---|
 | Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 | Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
+
+inscar independent checks: cutoff refinement 6.87e-14; DC-limit sensitivity 1.97e-14. The grid-refinement measurement is shown above.
 
 ## F region, 930 MHz
 
@@ -49,7 +51,7 @@ Upper panel: absolute spectrum per electron. Lower panel: absolute difference fr
 | Virtanen | 🟥 1.31e-05 | — | 🟩 0.00e+00 |
 | Nicolls | 🟩 1.32e-07 | 1.31e-14 | 🟩 3.29e-18 |
 | Skolar | 🟩 3.59e-12 | 3.23e-11 | 🟩 0.00e+00 |
-| inscar | 🟥 3.74e-04 | 2.37e-08 | 🟩 0.00e+00 |
+| inscar | 🟩 1.44e-13 | 1.51e-13 | 🟩 0.00e+00 |
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
@@ -59,6 +61,8 @@ A dash means no new refinement measurement in this run; it does not establish nu
 |---|---|---|
 | Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 | Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
+
+inscar independent checks: cutoff refinement 7.62e-14; DC-limit sensitivity 4.72e-15. The grid-refinement measurement is shown above.
 
 ## Molecular ions, 440.2 MHz
 

@@ -2,7 +2,7 @@
 
 Increasing Gordeyev resolution helps, but cannot remove the discrepancy caused by the original approximate permittivity. Using standard SI permittivity and optional nonuniform Simpson quadrature brings all five compatible Maxwellian cases below the 10⁻⁶ threshold. No plasma parameters, amplitudes or frequency shifts were fitted.
 
-**Proposed upstream change:** [inscar PR #537](https://github.com/engeir/inscar/pull/537), [tested commit](https://github.com/jvierine/inscar/commit/532412a). These are results from the proposed patch, not the pinned upstream release. The original README comparison and HDF5 tables are retained.
+**Proposed upstream change:** [inscar PR #537](https://github.com/engeir/inscar/pull/537), [tested commit](https://github.com/jvierine/inscar/commit/532412a). The main tests now use this pinned PR commit. The earlier upstream spectra remain in this historical experiment and in Git history.
 
 ![inscar plasma line and Gordeyev resolution comparison](figures/inscar_accuracy.png)
 

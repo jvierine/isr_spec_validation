@@ -24,13 +24,11 @@ The threshold is 10⁻⁶. Errors use `max(abs(A-B))/max(max(abs(A)),max(abs(B))
 | Virtanen | 8/11 | 🟥 4.39e-04 | Topside, 440.2 MHz |
 | Nicolls | 11/11 | 🟥 3.41e-04 | Electron plasma lines |
 | Skolar | 7/11 | 🟩 1.33e-11 | Magnetic field, 42° from B |
-| inscar | 5/11 | 🟥 1.93e-01 | Electron plasma lines |
+| inscar | 5/11 | 🟩 1.30e-08 | Electron plasma lines |
 | Martinez | 0/11 | not run | MATLAB execution cancelled |
 | Sandbem (ISRTS) | 0/11 | not run | MATLAB execution cancelled |
 
-**Convergence limitation:** inscar’s plasma-line spectrum changes by more than 10⁻⁶ between its recorded settings. Its plotted discrepancy is provisional. Native constants, approximations and floating-point precision differ among codes; these were retained rather than tuned to obtain agreement.
-
-**inscar follow-up:** a [proposed upstream correction and Simpson integration option](INSCAR_ACCURACY.md) brings all five compatible cases below 10⁻⁶, including a plasma-line error of 1.30 × 10⁻⁸. The table above retains the original upstream results.
+**inscar version:** these tests use [commit 532412a](https://github.com/jvierine/inscar/commit/532412a280a7e3373595fbaff763bcf12471622e) from [PR #537](https://github.com/engeir/inscar/pull/537), with standard SI permittivity and Simpson integration at 128,001 samples per species. Grid resolution, time cutoff and the DC limit are checked separately. The [accuracy study](INSCAR_ACCURACY.md) retains the earlier upstream results for comparison.
 
 ## Baseline pairwise agreement
 
@@ -38,15 +36,15 @@ Worst error over the six unmagnetized ion-line tests. Each cell includes the num
 
 | Code | Analytic | Vierinen | Swoboda | Kinetic | Buchert | Virtanen | Nicolls | Skolar | inscar |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| Analytic | — | 🟩 9.58e-11 (6) | 🟩 1.14e-15 (6) | 🟩 1.80e-15 (6) | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟥 3.74e-04 (2) |
-| Vierinen | 🟩 9.58e-11 (6) | — | 🟩 9.58e-11 (6) | 🟩 9.58e-11 (6) | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟥 3.74e-04 (2) |
-| Swoboda | 🟩 1.14e-15 (6) | 🟩 9.58e-11 (6) | — | 🟩 1.80e-15 (6) | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟥 3.74e-04 (2) |
-| Kinetic | 🟩 1.80e-15 (6) | 🟩 9.58e-11 (6) | 🟩 1.80e-15 (6) | — | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟥 3.74e-04 (2) |
-| Buchert | 🟩 2.23e-09 (6) | 🟩 2.23e-09 (6) | 🟩 2.23e-09 (6) | 🟩 2.23e-09 (6) | — | 🟥 4.39e-04 (6) | 🟩 1.52e-07 (6) | 🟩 2.23e-09 (2) | 🟥 3.74e-04 (2) |
-| Virtanen | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | — | 🟥 4.39e-04 (6) | 🟥 1.46e-05 (2) | 🟥 3.70e-04 (2) |
-| Nicolls | 🟩 1.55e-07 (6) | 🟩 1.55e-07 (6) | 🟩 1.55e-07 (6) | 🟩 1.55e-07 (6) | 🟩 1.52e-07 (6) | 🟥 4.39e-04 (6) | — | 🟩 1.55e-07 (2) | 🟥 3.74e-04 (2) |
-| Skolar | 🟩 7.97e-12 (2) | 🟩 7.97e-12 (2) | 🟩 7.97e-12 (2) | 🟩 7.97e-12 (2) | 🟩 2.23e-09 (2) | 🟥 1.46e-05 (2) | 🟩 1.55e-07 (2) | — | 🟥 3.74e-04 (2) |
-| inscar | 🟥 3.74e-04 (2) | 🟥 3.74e-04 (2) | 🟥 3.74e-04 (2) | 🟥 3.74e-04 (2) | 🟥 3.74e-04 (2) | 🟥 3.70e-04 (2) | 🟥 3.74e-04 (2) | 🟥 3.74e-04 (2) | — |
+| Analytic | — | 🟩 9.58e-11 (6) | 🟩 1.14e-15 (6) | 🟩 1.80e-15 (6) | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟩 1.44e-13 (2) |
+| Vierinen | 🟩 9.58e-11 (6) | — | 🟩 9.58e-11 (6) | 🟩 9.58e-11 (6) | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟩 1.67e-13 (2) |
+| Swoboda | 🟩 1.14e-15 (6) | 🟩 9.58e-11 (6) | — | 🟩 1.80e-15 (6) | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟩 1.44e-13 (2) |
+| Kinetic | 🟩 1.80e-15 (6) | 🟩 9.58e-11 (6) | 🟩 1.80e-15 (6) | — | 🟩 2.23e-09 (6) | 🟥 4.39e-04 (6) | 🟩 1.55e-07 (6) | 🟩 7.97e-12 (2) | 🟩 1.44e-13 (2) |
+| Buchert | 🟩 2.23e-09 (6) | 🟩 2.23e-09 (6) | 🟩 2.23e-09 (6) | 🟩 2.23e-09 (6) | — | 🟥 4.39e-04 (6) | 🟩 1.52e-07 (6) | 🟩 2.23e-09 (2) | 🟩 2.23e-09 (2) |
+| Virtanen | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | 🟥 4.39e-04 (6) | — | 🟥 4.39e-04 (6) | 🟥 1.46e-05 (2) | 🟥 1.46e-05 (2) |
+| Nicolls | 🟩 1.55e-07 (6) | 🟩 1.55e-07 (6) | 🟩 1.55e-07 (6) | 🟩 1.55e-07 (6) | 🟩 1.52e-07 (6) | 🟥 4.39e-04 (6) | — | 🟩 1.55e-07 (2) | 🟩 1.55e-07 (2) |
+| Skolar | 🟩 7.97e-12 (2) | 🟩 7.97e-12 (2) | 🟩 7.97e-12 (2) | 🟩 7.97e-12 (2) | 🟩 2.23e-09 (2) | 🟥 1.46e-05 (2) | 🟩 1.55e-07 (2) | — | 🟩 8.02e-12 (2) |
+| inscar | 🟩 1.44e-13 (2) | 🟩 1.67e-13 (2) | 🟩 1.44e-13 (2) | 🟩 1.44e-13 (2) | 🟩 2.23e-09 (2) | 🟥 1.46e-05 (2) | 🟩 1.55e-07 (2) | 🟩 8.02e-12 (2) | — |
 
 [HDF5 arrays and pairwise matrices](tables/expanded/) retain the original grids and plasma parameters. The [original four-code data](tables/comparison/) and [original extended data](tables/extended/) remain available, including their earlier refinement checks.
 
