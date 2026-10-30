@@ -86,6 +86,8 @@ def main():
                 for component,a in zip(['S_ion','S_electron','S_total'],v): g[n+'/'+component]=a
             stamp(g, {n:used_sources[n] for n in names}, 'refine.py')
             print(names,matrix,'convergence',sc,jc,flush=True)
+    from report import write_extended_results
+    write_extended_results()
 
 
 if __name__=='__main__': main()

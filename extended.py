@@ -26,7 +26,6 @@ def main():
              dict(base,name='neutral_bgk_parallel',theta=0.,nu_e=10000.,nu_i=1000.),
              dict(base,name='plasma_lines',B=0.,theta=0.,te=4000.,ti=1000.,
                   frequency_hz=np.concatenate([np.arange(-4e6,-2e6+1,2500.),np.arange(2e6,4e6+1,2500.)]))]
-    records = []
     for case in cases:
         print(case['name'],flush=True)
         values = {'Kinetic':ours(case), 'Swoboda':swoboda(Specinit,case)}
@@ -55,16 +54,9 @@ def main():
                 attach(h.create_group(name),case)
                 for component,a in zip(['S_ion','S_electron','S_total'],array): h[name+'/'+component]=a
             stamp(h, {n:provenance[n] for n in names}, 'extended.py')
-        records.append((case['name'],names,matrix,convergence))
         print(names,matrix,'convergence',convergence,flush=True)
-    lines=['# Additional comparisons','', 'Same metric and 10⁻⁶ threshold as the README. Angles here are measured from B.','']
-    for name,names,matrix,conv in records:
-        lines += ['## '+name,'','| Code | '+' | '.join(names)+' |','|---|'+'---:|'*len(names)]
-        for i,n in enumerate(names):
-            lines += ['| '+n+' | '+' | '.join('—' if i==j else f'{"🟩" if x<=1e-6 else "🟥"} {x:.2e}' for j,x in enumerate(matrix[i]))+' |']
-        lines += ['']
-        if conv is not None: lines += [f'Vierinen quadrature refinement (total spectrum): {conv[-1]:.2e}.','']
-    (ROOT/'EXTENDED_RESULTS.md').write_text('\n'.join(lines))
+    from report import write_extended_results
+    write_extended_results()
 
 
 if __name__=='__main__': main()

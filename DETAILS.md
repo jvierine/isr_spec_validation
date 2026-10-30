@@ -93,6 +93,18 @@ but leaves these stationary power spectra unchanged.
 430 MHz, a 40 μT magnetic field at 42 and 85 degrees from B, neutral BGK
 collisions at 42 degrees and parallel to B, and an unmagnetized plasma-line case.
 These are prescribed validation parameters, not fitted Arecibo measurements.
+Each case displays one pass/fail matrix for the configured calculation.
+Clicking a code name opens its executable call in [invocations.py](invocations.py),
+including the numerical settings used for the displayed result. For example:
+
+```sh
+conda run -n base python invocations.py --case magnetic_85deg --code Swoboda
+```
+
+This reruns the selected code and checks its spectrum against the saved table;
+it does not overwrite the data. Earlier numerical settings remain in HDF5 for
+convergence auditing, rather than appearing as an extra comparison matrix.
+
 The collision cases use electron/ion rates 10,000/1,000 s⁻¹ and compare only
 Swoboda and Kinetic: Vierinen's tested spectrum entry point does not implement
 those collisions. Exact perpendicular, Coulomb collisions, non-Maxwellian
