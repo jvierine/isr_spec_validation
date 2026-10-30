@@ -24,6 +24,33 @@ def value(x):
     return ('🟩' if x<=1e-6 else '🟥')+f' {x:.2e}'
 
 
+def quickstart_lines():
+    return ['## Test your own code','',
+        'Start with the F-region case shown above. You only need Python 3, NumPy and h5py to compare results; the reference data are included.','',
+        '**1. Download the repository and install the two comparison dependencies** in your usual Python environment:',
+        '', '```sh', 'git clone https://github.com/jvierine/isr_spec_validation.git',
+        'cd isr_spec_validation', 'python -m pip install numpy h5py', '```','',
+        '**2. Open [check_my_spectrum.py](check_my_spectrum.py) and replace the `raise NotImplementedError(...)` line in '
+        '`my_spectrum()` with a call to your calculator.** Use these inputs:', '',
+        '| Parameter | Value |','|---|---|',
+        '| Radar | 440.2 MHz, monostatic backscatter |',
+        '| Electron density | 10¹¹ m⁻³ |',
+        '| Temperatures | Te = 2000 K; Ti = 1000 K |',
+        '| Ions | 100% O⁺, mass = 16 atomic mass units |',
+        '| Distribution | Isotropic Maxwellian |',
+        '| Magnetic field, collision rates and drifts | All zero |','',
+        'The helper supplies 801 frequencies from −100,000 to +100,000 Hz. Return the total spectrum '
+        '(ion + electron terms) on that exact grid, **per electron per Hz**. Divide density-scaled output by ne; '
+        'multiply a PSD per radian/s by 2π to convert it to per Hz. Do not normalize the peak or area.','',
+        '**3. Run the comparison:**','', '```sh', 'python check_my_spectrum.py', '```','',
+        'It prints **PASS** or **FAIL** and the maximum difference divided by the larger spectrum peak. '
+        'The tolerance is 10⁻⁶. A pass applies to this case and grid; it is a starting check, not a validation of every regime.','',
+        'Using R, MATLAB, Julia or another language? Run your calculator there and replace the same function with code '
+        'that reads your output spectrum from HDF5; a two-line example is included in the helper. The supplied grid is `frequency_hz` in '
+        '[the reference file](tables/expanded/f_region_440.2MHz.h5). '
+        'For more cases, see the [ion-line](COMPARISON_RESULTS.md) and [extended](EXTENDED_RESULTS.md) parameters and data.','']
+
+
 def parameters(h):
     c=json.loads(h.attrs['parameters_json'])
     ions=', '.join(f'{n}: {fraction:g} ({mass:g} u)' for n,mass,fraction in c['ions'])
@@ -92,6 +119,7 @@ def main():
            'Nine implementations evaluated across eleven prescribed Maxwellian tests. '
            'Each test has a spectrum overlay and a residual panel. Martinez and Sandbem are listed but were not run after MATLAB license failures; Virtanen uses the working R/C implementation.','',
            '[Six ion-line tests and plots](COMPARISON_RESULTS.md) · [Five magnetic, collision and plasma-line tests and plots](EXTENDED_RESULTS.md)','',
+           *quickstart_lines(),
            '## Coverage and measured agreement','','The threshold is 10⁻⁶. Errors use `max(abs(A-B))/max(max(abs(A)),max(abs(B)))`, '
            'with fixed physical unit conversions and no fitted scaling. Kinetic is the plotting reference, not an assertion of ground truth. '
            'Results apply only to the cases and frequency samples evaluated.','',
