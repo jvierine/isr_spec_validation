@@ -78,7 +78,9 @@ def main():
                'No fitted scaling or frequency shifts. See [adapter definitions and limitations](NEW_CODES.md).','']
         for p in items: lines+=case_lines(p)
         (ROOT/filename).write_text('\n'.join(lines))
-    lines=['# ISR spectrum validation','','Nine implementations evaluated across eleven prescribed Maxwellian tests. '
+    lines=['# ISR spectrum validation','',
+           'This is an effort to document and cross-validate different open source incoherent scatter radar spectrum calculation programs and provide a way for anyone implemented such a program to be able to compare their result with others -- without trying to get the numbers out of a plot in a scientific article.','',
+           'Nine implementations evaluated across eleven prescribed Maxwellian tests. '
            'Each test has a spectrum overlay and a residual panel. Martinez and Sandbem are listed but were not run after MATLAB license failures; Virtanen uses the working R/C implementation.','',
            '[Six ion-line tests and plots](COMPARISON_RESULTS.md) · [Five magnetic, collision and plasma-line tests and plots](EXTENDED_RESULTS.md)','',
            '## Coverage and measured agreement','','The threshold is 10⁻⁶. Errors use `max(abs(A-B))/max(max(abs(A)),max(abs(B)))`, '

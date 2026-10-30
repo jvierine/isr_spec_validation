@@ -178,7 +178,7 @@ def write_readme(matrix):
         expanded_report()
         return
     lines = ['# ISR spectrum validation', '',
-             'Spectrum tables generated with four different codes:', '',
+             'This is an effort to document and cross-validate different open source incoherent scatter radar spectrum calculation programs and provide a way for anyone implemented such a program to be able to compare their result with others -- without trying to get the numbers out of a plot in a scientific article.', '',
              '| Code | Source |', '|---|---|',
              '| Analytic | [This repository](calculate.py): Maxwellian Gordeyev integral |',
              f'| Vierinen | [Juha Vierinen, isr_analysis/isr_spec.py](https://github.com/jvierine/isr_analysis/blob/{JUHA_REV}/isr_spec.py) |',
