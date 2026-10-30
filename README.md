@@ -1,6 +1,6 @@
 # ISR spectrum validation
 
-Spectrum tables generated with four different codes:
+This is an effort to document and cross-validate different open source incoherent scatter radar spectrum calculation programs.
 
 | Code | Source |
 |---|---|
