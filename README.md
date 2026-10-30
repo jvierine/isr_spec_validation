@@ -1,6 +1,6 @@
 # ISR spectrum validation
 
-This is an effort to document and cross-validate different open source incoherent scatter radar spectrum calculation programs.
+This is an effort to document and cross-validate different open source incoherent scatter radar spectrum calculation programs and provide a way for anyone implemented such a program to be able to compare their result with others -- without trying to get the numbers out of a plot in a scientific article.
 
 | Code | Source |
 |---|---|
