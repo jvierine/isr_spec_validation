@@ -1,5 +1,9 @@
 # Expanded comparisons and reproduction
 
+An [inscar accuracy follow-up](INSCAR_ACCURACY.md) separates numerical resolution
+from the permittivity constant and tests a proposed upstream Simpson option.
+The original comparisons described below retain the pinned upstream results.
+
 Buchert, Virtanen, Nicolls, Skolar and inscar were evaluated using their native
 Julia, R/C or Python implementations. Martinez and Sandbem (the ISRTS account,
 interpreted from “sandberry”) are explicit **not run** entries. MATLAB execution

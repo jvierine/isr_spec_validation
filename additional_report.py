@@ -100,6 +100,9 @@ def main():
             '**Convergence limitation:** inscar’s plasma-line spectrum changes by more than 10⁻⁶ between its recorded settings. '
             'Its plotted discrepancy is provisional. Native constants, approximations and floating-point precision differ among codes; '
             'these were retained rather than tuned to obtain agreement.','',
+            '**inscar follow-up:** a [proposed upstream correction and Simpson integration option](INSCAR_ACCURACY.md) '
+            'brings all five compatible cases below 10⁻⁶, including a plasma-line error of 1.30 × 10⁻⁸. '
+            'The table above retains the original upstream results.','',
             '## Baseline pairwise agreement','','Worst error over the six unmagnetized ion-line tests. Each cell includes the number of shared cases; '
             'Skolar and inscar support the two single-ion cases in this adapter.','',
             '| Code | '+' | '.join(NAMES)+' |','|---|'+'---:|'*len(NAMES)]
