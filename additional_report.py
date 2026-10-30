@@ -58,6 +58,10 @@ def case_lines(path):
         for name,g in h['availability'].items():
             if g.attrs['status']!='computed':
                 lines.append(f"| {name} | {g.attrs['status']} | {g.attrs['reason']} |")
+        if 'inscar' in h:
+            a=h['inscar'].attrs
+            lines+=['',f"inscar independent checks: cutoff refinement {a['cutoff_convergence_error']:.2e}; "
+                    f"DC-limit sensitivity {a['dc_limit_error']:.2e}. The grid-refinement measurement is shown above."]
         lines+=['']
         return lines
 
@@ -97,12 +101,10 @@ def main():
         lines.append(f'| {name} | {len(results[name])}/11 | {"reference" if name=="Kinetic" else value(worst)} | {title(case)} |')
     lines+=['| Martinez | 0/11 | not run | MATLAB execution cancelled |',
             '| Sandbem (ISRTS) | 0/11 | not run | MATLAB execution cancelled |','',
-            '**Convergence limitation:** inscar’s plasma-line spectrum changes by more than 10⁻⁶ between its recorded settings. '
-            'Its plotted discrepancy is provisional. Native constants, approximations and floating-point precision differ among codes; '
-            'these were retained rather than tuned to obtain agreement.','',
-            '**inscar follow-up:** a [proposed upstream correction and Simpson integration option](INSCAR_ACCURACY.md) '
-            'brings all five compatible cases below 10⁻⁶, including a plasma-line error of 1.30 × 10⁻⁸. '
-            'The table above retains the original upstream results.','',
+            '**inscar version:** these tests use [commit 532412a](https://github.com/jvierine/inscar/commit/532412a280a7e3373595fbaff763bcf12471622e) '
+            'from [PR #537](https://github.com/engeir/inscar/pull/537), with standard SI permittivity and Simpson integration at 128,001 samples per species. '
+            'Grid resolution, time cutoff and the DC limit are checked separately. '
+            'The [accuracy study](INSCAR_ACCURACY.md) retains the earlier upstream results for comparison.','',
             '## Baseline pairwise agreement','','Worst error over the six unmagnetized ion-line tests. Each cell includes the number of shared cases; '
             'Skolar and inscar support the two single-ion cases in this adapter.','',
             '| Code | '+' | '.join(NAMES)+' |','|---|'+'---:|'*len(NAMES)]

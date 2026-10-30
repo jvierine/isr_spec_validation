@@ -1,9 +1,10 @@
 """Separate quadrature resolution from the permittivity correction in inscar.
 
 Run with PYTHONPATH pointing to the clean PR checkout's src directory.
-The original upstream comparison tables are retained unchanged.
+The original upstream comparison tables are read from their historical commit.
 """
 from pathlib import Path
+from io import BytesIO
 import hashlib
 import json
 import platform
@@ -17,6 +18,7 @@ import inscar as lib
 from compare import ROOT, error
 from additional import cases
 from provenance import source_info
+from inscar_baseline import BASELINE_COMMIT, baseline_bytes
 
 
 def evaluate(case, count, method, cutoff=15.):
@@ -54,6 +56,7 @@ def main():
     records={name:source_info(module/name) for name in ['config.py','numba_integration.py','spectrum_calculation.py']}
     dest=ROOT/'diagnostics/inscar_accuracy.h5'; dest.parent.mkdir(exist_ok=True)
     with h5py.File(dest,'w') as h:
+        h.attrs['baseline_git_commit']=BASELINE_COMMIT
         for name,record in records.items():
             g=h.create_group('provenance/'+name)
             for k,v in record.items(): g.attrs[k]=v
@@ -62,12 +65,13 @@ def main():
         h.attrs['scipy_version']=scipy.__version__;h.attrs['numba_version']=numba.__version__
         h.attrs['epsilon_0_standard']=c.epsilon_0;h.attrs['epsilon_0_original']=1e-9/(36*np.pi)
         for _,path,case in cases():
-            with h5py.File(ROOT/'tables/expanded'/path.name) as old:
+            original_bytes=baseline_bytes(case['name'])
+            with h5py.File(BytesIO(original_bytes)) as old:
                 if 'inscar' not in old: continue
                 g=h.create_group('cases/'+case['name']); g['frequency_hz']=case['frequency_hz']
                 g.attrs['parameters_json']=old.attrs['parameters_json']
                 ref=old['Kinetic/S_total'][:];g['reference']=ref;g['upstream_saved']=old['inscar/S_total'][:]
-                g.attrs['upstream_table_sha256']=hashlib.sha256((ROOT/'tables/expanded'/path.name).read_bytes()).hexdigest()
+                g.attrs['upstream_table_sha256']=hashlib.sha256(original_bytes).hexdigest()
             settings=[(n,'simpson',15.) for n in [32001,64001,128001]]+[(128001,'simpson',18.)]
             if case['name']=='plasma_lines': settings += [(n,'trapezoid',15.) for n in [64001,128001,256001,512001,1024001]]
             for n,method,cutoff in settings:

@@ -1,10 +1,12 @@
 """Verify and summarize the separate inscar accuracy experiment."""
 import hashlib
+from io import BytesIO
 import json
 import h5py
 import numpy as np
 from compare import ROOT,error
 from additional_report import title
+from inscar_baseline import baseline_bytes
 
 
 def main():
@@ -14,7 +16,7 @@ def main():
         'No plasma parameters, amplitudes or frequency shifts were fitted.','',
         '**Proposed upstream change:** [inscar PR #537](https://github.com/engeir/inscar/pull/537), '
         '[tested commit](https://github.com/jvierine/inscar/commit/532412a). '
-        'These are results from the proposed patch, not the pinned upstream release. The original README comparison and HDF5 tables are retained.','',
+        'The main tests now use this pinned PR commit. The earlier upstream spectra remain in this historical experiment and in Git history.','',
         '![inscar plasma line and Gordeyev resolution comparison](figures/inscar_accuracy.png)','',
         'Upper panel: positive plasma resonance, with the original 2.5 kHz sampling retained. '
         'Patched inscar uses standard permittivity and Simpson quadrature with 128,001 samples per species. '
@@ -29,9 +31,9 @@ def main():
     with h5py.File(ROOT/'diagnostics/inscar_accuracy.h5') as h:
         assert len(h['cases'])==5
         for name,g in h['cases'].items():
-            path=ROOT/'tables/expanded'/(name+'.h5')
-            assert hashlib.sha256(path.read_bytes()).hexdigest()==g.attrs['upstream_table_sha256']
-            with h5py.File(path) as old:
+            original_bytes=baseline_bytes(name)
+            assert hashlib.sha256(original_bytes).hexdigest()==g.attrs['upstream_table_sha256']
+            with h5py.File(BytesIO(original_bytes)) as old:
                 np.testing.assert_array_equal(g['frequency_hz'][:],old['frequency_hz'][:])
                 np.testing.assert_array_equal(g['reference'][:],old['Kinetic/S_total'][:])
                 np.testing.assert_array_equal(g['upstream_saved'][:],old['inscar/S_total'][:])

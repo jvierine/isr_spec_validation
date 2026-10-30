@@ -1,8 +1,9 @@
 # Expanded comparisons and reproduction
 
-An [inscar accuracy follow-up](INSCAR_ACCURACY.md) separates numerical resolution
-from the permittivity constant and tests a proposed upstream Simpson option.
-The original comparisons described below retain the pinned upstream results.
+The inscar tests now use the pinned commit from [PR #537](https://github.com/engeir/inscar/pull/537),
+with corrected SI permittivity and Simpson integration. The [accuracy study](INSCAR_ACCURACY.md)
+retains the earlier upstream results and separates numerical resolution from
+the permittivity effect. The PR is identified explicitly rather than treated as a released version.
 
 Buchert, Virtanen, Nicolls, Skolar and inscar were evaluated using their native
 Julia, R/C or Python implementations. Martinez and Sandbem (the ISRTS account,
@@ -24,7 +25,7 @@ their ion/electron components are not fabricated. All data products are HDF5.
 | Virtanen | [ISspectrum R/C](https://github.com/ilkkavir/ISspectrum/tree/28458b2cefcce247e010a0f2555a934a051927a4) | 8 | No oblique magnetic response; a parallel Maxwellian response equals the unmagnetized response. |
 | Nicolls | [ISR-school ISspec](https://github.com/isrsummerschool/lecture_supplements_2024/tree/5f02f3edaf09cc5b3f03617f50e9412ec12df4bd/is_spectral_model) | 11 | Coulomb collisions disabled, consistent with these tests. |
 | Skolar | [crskolar/OO_Collisions](https://github.com/crskolar/OO_Collisions/tree/e3e212f6c31d364c2bd48f01b3ebafdf9769f533) | 7 | Native `calcSpectra` combines one ion species with electrons. Mixtures are omitted. |
-| inscar | [engeir/inscar](https://github.com/engeir/inscar/tree/3bb9b1217c9a9b1cb5e5c320635cea1cf4ca9e05) | 5 | One ion species; the inspected collision formula is not the number-conserving neutral BGK operator used here. |
+| inscar | [PR #537 commit](https://github.com/jvierine/inscar/tree/532412a280a7e3373595fbaff763bcf12471622e) | 5 | One ion species; the inspected collision formula is not the number-conserving neutral BGK operator used here. |
 | Martinez | [ISR_Model](https://github.com/miguel-martinez-ledesma/ISR_Model/tree/369e277c7d388b7b3e4c63d5402b31304ef954ef) | 0 | Not run: MATLAB execution cancelled. |
 | Sandbem | [ISRTS](https://github.com/Sandbem/ISRTS/tree/d31ddafa87be19c957bb1949dcddc29a2f518432) | 0 | Not run: MATLAB execution cancelled. |
 
@@ -36,8 +37,8 @@ Shared ancestry also means these are not nine independent theoretical derivation
 ## Units, limits and numerical settings
 
 Every output is a PSD per electron per Hz. The conversions below are fixed
-before comparison; no peak, area, amplitude or frequency is fitted. Upstream
-repositories remain unmodified. Compatibility changes are confined to adapters.
+before comparison; no peak, area, amplitude or frequency is fitted. Source
+checkouts exactly match the listed commits. Compatibility changes are confined to adapters.
 
 **Buchert.** Invoke native `ScatterVolume`, `Ion`, `Plasma` and `pwrspec` with
 `system=1/pi`, then divide by ne. This removes the native system factor and
@@ -81,18 +82,17 @@ zero rate, compare 1e-6 with 1e-7 s⁻¹ and save the latter. Actual nonzero tes
 collision rates are passed unchanged. Single-ion spectra are not averaged to
 manufacture mixtures.
 
-**inscar.** Invoke `SpectrumCalculation` with `IntMaxwell` and the native
-trapezoid integrator; multiply its angular-frequency density PSD by `2*pi/ne`.
+**inscar.** Invoke the pinned PR's `SpectrumCalculation` with `IntMaxwell` and
+`gordeyev_method='simpson'`; multiply its angular-frequency density PSD by `2*pi/ne`.
 The required positive field is set to 40 μT with parallel geometry for B=0
-tests: the perpendicular term vanishes exactly. DC uses 1e-4 Hz, compared with
-1e-3 Hz. For each species the coarse time cutoff is
-`12/(k*sqrt(kB*T/m)*abs(cos(theta)))`, increased by 25% for the fine run.
-The nonuniform grid retains the upstream exponent 3. Ion-line coarse/fine
-point counts are 32,001/64,001; plasma-line counts are 128,001/256,001.
-Native permittivity `1e-9/(36*pi)` is retained. Plasma-line refinement remains
-above 1e-6 and is **unresolved**: its discrepancy is not a converged estimate.
-Other tested inscar cases have refinement changes below 1e-6; this does not
-eliminate systematic error from constants or other approximations.
+tests: the perpendicular term vanishes exactly. All cases use 64,001/128,001
+coarse/fine samples per species, exponent 3, and a fixed time cutoff
+`15/(k*sqrt(kB*T/m)*abs(cos(theta)))`. The saved result uses 128,001 samples.
+An independent check increases the cutoff factor from 15 to 18 at fixed sample
+count. DC uses 1e-4 Hz and is checked separately at 1e-3 Hz. The pinned code uses
+`scipy.constants.epsilon_0`. Arrays and errors for grid, cutoff and DC checks
+are retained in each HDF5 group. All five compatible cases must pass 1e-6
+against Kinetic and all three sensitivity checks in `verify_expanded.py`.
 
 The refinement column uses the pairwise comparison metric. It is a two-setting
 sensitivity check, not an error bound. Original four-code refinement records
@@ -107,7 +107,7 @@ collection: hashes are checked against Git. First reproduce original data with
 
 ```sh
 conda run -n base python additional.py prepare
-conda run -n base python -m pip install --no-deps -e .cache/inscar
+conda run -n base python -m pip install --no-deps -e .cache/inscar-updated
 conda run -n base python additional.py python
 ```
 

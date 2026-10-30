@@ -35,6 +35,13 @@ def main():
                     if 'coarse_S_total' in g:
                         np.testing.assert_equal(error(a,g['coarse_S_total'][:]),g.attrs['convergence_error'])
                         assert g.attrs['convergence_status']==('checked' if g.attrs['convergence_error']<=1e-6 else 'unresolved')
+                    if name=='inscar':
+                        assert g.attrs['gordeyev_method']=='simpson' and g.attrs['gordeyev_size']==128001
+                        for dataset,metric in [('cutoff_S_total','cutoff_convergence_error'),('dc_limit_S_total','dc_limit_error')]:
+                            np.testing.assert_equal(error(a,g[dataset][:]),g.attrs[metric])
+                            assert g.attrs[metric]<=1e-6
+                        assert g.attrs['convergence_error']<=1e-6
+                        assert error(a,h['Kinetic/S_total'][:])<=1e-6
             for n in ['Martinez','Sandbem']:
                 assert h['availability/'+n].attrs['status']=='not_run' and n not in h
             for n in counts:

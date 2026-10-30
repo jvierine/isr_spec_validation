@@ -33,6 +33,10 @@ Nicolls distributions below belong to the same model family.
 
 ### inscar
 
+The main comparisons use the updated [PR #537 commit](https://github.com/jvierine/inscar/tree/532412a280a7e3373595fbaff763bcf12471622e)
+with SI permittivity and Simpson quadrature. The [accuracy study](INSCAR_ACCURACY.md)
+retains results from the earlier upstream version cataloged below.
+
 [Eirik R. Enger, engeir/inscar](https://github.com/engeir/inscar).
 The documentation describes `IntMaxwell`, `IntKappa`, and `IntLong` for an
 arbitrary isotropic distribution, based on Hagfors (1961) and Mace (2003).

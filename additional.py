@@ -57,6 +57,17 @@ def python_run(selected=None):
                     if not np.isfinite(high).all(): raise ValueError('Nonfinite spectrum')
                     g['S_total']=high; g['coarse_S_total']=low
                     g.attrs['convergence_error']=error(low,high)
+                    if name=='inscar':
+                        cutoff=runner(case,True,cutoff_sigma=18.)
+                        dc=runner(case,True,dc_hz=1e-3)
+                        g['cutoff_S_total']=cutoff; g['dc_limit_S_total']=dc
+                        g.attrs['cutoff_convergence_error']=error(high,cutoff)
+                        g.attrs['dc_limit_error']=error(high,dc)
+                        g.attrs['gordeyev_method']='simpson'; g.attrs['gordeyev_exp']=3
+                        g.attrs['gordeyev_size']=128001;g.attrs['coarse_gordeyev_size']=64001
+                        g.attrs['cutoff_sigma']=15.;g.attrs['check_cutoff_sigma']=18.
+                        g.attrs['dc_hz']=1e-4;g.attrs['check_dc_hz']=1e-3
+                        g.attrs['pull_request_url']='https://github.com/engeir/inscar/pull/537'
                     g.attrs['status']='computed'
                     print('convergence',g.attrs['convergence_error'],flush=True)
                 except Unsupported as exc:
@@ -109,7 +120,8 @@ def collect():
                         raw.copy(g,h,name=name)
                         for k,v in g.attrs.items(): h[name].attrs[k]=text_attr(v)
                         for k,v in adapter_info.items(): h[name].attrs['adapter_'+k]=v
-                        h[name].attrs['convergence_status']=('checked' if g.attrs['convergence_error']<=1e-6 else 'unresolved') if 'convergence_error' in g.attrs else 'not_assessed'
+                        checks=[g.attrs[k] for k in ['convergence_error','cutoff_convergence_error','dc_limit_error'] if k in g.attrs]
+                        h[name].attrs['convergence_status']=('checked' if max(checks)<=1e-6 else 'unresolved') if checks else 'not_assessed'
                         if name=='Virtanen':
                             native=ROOT/'.cache/ISspectrum/src/spec_worker.c'
                             assert text_attr(g.attrs['native_code_sha256'])==hashlib.sha256(native.read_bytes()).hexdigest()

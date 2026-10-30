@@ -1,4 +1,4 @@
-"""Pinned, unmodified upstream checkouts for the expanded comparisons."""
+"""Pinned clean source checkouts, including the explicitly selected inscar PR."""
 from pathlib import Path
 import subprocess
 from compare import ROOT, source
@@ -11,7 +11,7 @@ SOURCES = {
     'Nicolls': ('isrsummerschool/lecture_supplements_2024', '5f02f3edaf09cc5b3f03617f50e9412ec12df4bd', 'isr_school', 'is_spectral_model/ismodel.py'),
     'Sandbem': ('Sandbem/ISRTS', 'd31ddafa87be19c957bb1949dcddc29a2f518432', 'ISRTS', 'src/ISR_spectrumKM.m'),
     'Skolar': ('crskolar/OO_Collisions', 'e3e212f6c31d364c2bd48f01b3ebafdf9769f533', 'OO_Collisions', 'ISRSpectraFunctions.py'),
-    'inscar': ('engeir/inscar', '3bb9b1217c9a9b1cb5e5c320635cea1cf4ca9e05', 'inscar', 'src/inscar/spectrum_calculation.py'),
+    'inscar': ('jvierine/inscar', '532412a280a7e3373595fbaff763bcf12471622e', 'inscar-updated', 'src/inscar/spectrum_calculation.py'),
 }
 
 

@@ -4,6 +4,7 @@ Compatibility limits and fixed unit conversions are documented in NEW_CODES.md.
 The native one-ion calculators are never averaged to manufacture a mixture.
 """
 import importlib.util
+from pathlib import Path
 import sys
 from functools import lru_cache
 import numpy as np
@@ -103,16 +104,20 @@ def skolar(case, refined=True):
     return mod.calcSpectra(parts[0][0],parts[1][0],parts[0][1],parts[1][1])
 
 
-def inscar(case, refined=True):
+def inscar(case, refined=True, cutoff_sigma=15., dc_hz=1e-4):
     if len(case['ions'])!=1:
         raise Unsupported('Native SpectrumCalculation supports one ion species only.')
     if case.get('nu_e',0) or case.get('nu_i',0):
         raise Unsupported('The inspected collisional F function is not the number-conserving neutral BGK response tested here.')
     import inscar as lib
     import numba
+    from additional_sources import SOURCES
+    expected=ROOT/'.cache'/SOURCES['inscar'][2]/'src/inscar/__init__.py'
+    if Path(lib.__file__).resolve()!=expected.resolve():
+        raise RuntimeError('Install the pinned .cache/inscar-updated package before running comparisons.')
     numba.set_num_threads(1)
     f=case['frequency_hz'].copy()
-    f[f==0]=1e-4 if refined else 1e-3
+    f[f==0]=dc_hz
 
     class Grid(lib.Parameters):
         @property
@@ -125,12 +130,12 @@ def inscar(case, refined=True):
     sim=lib.SpectrumCalculation(); sim.set_params(p)
     k=abs(p.radar_wavenumber); co=abs(np.cos(p.aspect_angle))
     for label,mass,T in [('ion',case['ions'][0][1]*c.atomic_mass,case['ti']),('electron',c.m_e,case['te'])]:
-        # Truncate only after the parallel Gaussian has decayed by exp(-72).
-        upper=12/(k*np.sqrt(c.k*T/mass)*co)
-        points=(256001 if refined else 128001) if case['name']=='plasma_lines' else (64001 if refined else 32001)
+        # Refine the grid at fixed cutoff; check the cutoff independently.
+        upper=cutoff_sigma/(k*np.sqrt(c.k*T/mass)*co)
+        points=128001 if refined else 64001
         part=lib.Particle(mass=mass,temperature=T,number_density=case['ne'],
-                          gordeyev_size=points,
-                          gordeyev_upper_lim=upper*(1.25 if refined else 1.))
+                          gordeyev_size=points,gordeyev_exp=3,
+                          gordeyev_method='simpson',gordeyev_upper_lim=upper)
         getattr(sim,'set_'+label)(part)
         getattr(sim,'set_'+label+'_integration_function')(lib.IntMaxwell())
     _,s=sim.calculate_spectrum()
