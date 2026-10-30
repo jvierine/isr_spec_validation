@@ -12,6 +12,8 @@ REQUIRED=['ne_m3','te_K','ti_K','vi_m_s','B_T','nu_en_s_1','nu_ei_s_1','nu_in_s_
 def verify_provenance():
     repos={'Analytic':ROOT,'Kinetic':ROOT,'Vierinen':ROOT/'.cache/vierinen',
            'Swoboda':ROOT/'.cache/swoboda'}
+    from additional_sources import SOURCES
+    repos.update({name:ROOT/'.cache'/entry[2] for name,entry in SOURCES.items()})
     for path in sorted((ROOT/'tables').rglob('*.h5')):
         with h5py.File(path) as h:
             for group in [h]+([h['refined']] if 'refined' in h else []):

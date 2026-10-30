@@ -173,6 +173,10 @@ def main():
 
 
 def write_readme(matrix):
+    if (ROOT/'tables/expanded').exists():
+        from additional_report import main as expanded_report
+        expanded_report()
+        return
     lines = ['# ISR spectrum validation', '',
              'Spectrum tables generated with four different codes:', '',
              '| Code | Source |', '|---|---|',

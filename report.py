@@ -86,6 +86,10 @@ def write_extended_results():
 
 
 def main():
+    if (ROOT/'tables/expanded').exists():
+        from additional_report import main as expanded_report
+        expanded_report()
+        return
     with h5py.File(ROOT/'tables/comparison/summary.h5') as h: write_readme(h['worst_pairwise_error'][:])
     write_extended_results()
 

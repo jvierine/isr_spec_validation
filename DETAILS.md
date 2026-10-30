@@ -1,5 +1,8 @@
 # Reproduce the comparisons
 
+This document describes the original four-code runs. Expanded native-code
+comparisons and all per-test figures are documented in [NEW_CODES.md](NEW_CODES.md).
+
 ```sh
 conda run -n base python compare.py
 conda run -n base python extended.py
@@ -105,7 +108,7 @@ This reruns the selected code and checks its spectrum against the saved table;
 it does not overwrite the data. Earlier numerical settings remain in HDF5 for
 convergence auditing, rather than appearing as an extra comparison matrix.
 
-The collision cases use electron/ion rates 10,000/1,000 s⁻¹ and compare only
+The original collision cases use electron/ion rates 10,000/1,000 s⁻¹ and compare only
 Swoboda and Kinetic: Vierinen's tested spectrum entry point does not implement
 those collisions. Exact perpendicular, Coulomb collisions, non-Maxwellian
 distributions and HF-driven waves are outside this validation set.
@@ -113,7 +116,7 @@ distributions and HF-driven waves are outside this validation set.
 Swoboda's initial magnetic quadrature uses N=100. The refined tests increase
 this adaptively until the last refinement changes the total spectrum by less
 than 1e-8 of peak, and tighten `errF` from 1e-6 to 1e-12. N=800 suffices at
-42 degrees; the 85-degree case requires N=6400. After refinement, all tested
+42 degrees; the 85-degree case requires N=6400. After refinement, all original tested
 pairs pass 1e-6. The worst plasma-line discrepancy is 8.55e-9; the magnetic
 and neutral-collision discrepancies are below 2.2e-14.
 The same upstream integrator and physical equations are used; every convergence

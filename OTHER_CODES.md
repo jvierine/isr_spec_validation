@@ -4,10 +4,11 @@ Catalog checked on **30 October 2026** using upstream documentation, source
 files, and archive records. These programs calculate theoretical incoherent
 scatter spectra; packages that only read or plot measured ISR data are excluded.
 
-**Catalog only:** none of the additions below has been run or validated in this
-repository. Capabilities describe the inspected implementation or its author's
-documentation, not verified accuracy. The four-code comparisons in the
-[README](README.md) and the existing HDF5 tables are unchanged.
+**Execution status:** Buchert, Virtanen's R/C program, Nicolls, Skolar and inscar
+now have [numerical comparisons](README.md) and [documented adapters](NEW_CODES.md).
+Martinez and Sandbem are listed as not run following cancellation of MATLAB
+execution. Remaining entries are catalog only. Capabilities below describe
+the inspected implementation or its author's documentation, not verified accuracy.
 
 ## Calculators and implementations
 
