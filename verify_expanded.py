@@ -10,7 +10,7 @@ from additional_sources import record
 
 
 def main():
-    counts={n:0 for n in ['Buchert','Virtanen','Nicolls','Skolar','inscar']}
+    counts={n:0 for n in ['Buchert','Virtanen','Martinez','Nicolls','Sandbem','Skolar','inscar']}
     for category,oldpath,case in cases():
         path=ROOT/'tables/expanded'/oldpath.name
         with h5py.File(path) as h,h5py.File(oldpath) as old:
@@ -28,8 +28,18 @@ def main():
                 else:
                     counts[name]+=1
                     assert g.attrs['status']=='computed'
+                    if name in ['Martinez','Sandbem']:
+                        assert g.attrs['host']=='avaruus' and g.attrs['threads_per_call']==1
+                        assert g.attrs['median_elapsed_s']>0
+                        assert len(g['elapsed_s'])==7
+                        assert hashlib.sha256((ROOT/'octave/octave_kernel.m').read_bytes()).hexdigest()==g.attrs['adapter_sha256']
+                        assert hashlib.sha256((ROOT/'.cache'/('ISR_Model' if name=='Martinez' else 'ISRTS')/g.attrs['code_path']).read_bytes()).hexdigest()==g.attrs['code_sha256']
+                        continue
                     r=record(name)
-                    for k,v in r.items(): assert g.attrs[k]==v,(path,name,k)
+                    for k,v in r.items():
+                        measured=g.attrs[k]
+                        if k=='git_url': measured=measured.removesuffix('.git'); v=v.removesuffix('.git')
+                        assert measured==v,(path,name,k)
                     code=subprocess.check_output(['git','-C',str(ROOT),'show',g.attrs['adapter_git_commit']+':'+g.attrs['adapter_code_path']])
                     assert hashlib.sha256(code).hexdigest()==g.attrs['adapter_sha256']
                     if 'coarse_S_total' in g:
@@ -42,10 +52,8 @@ def main():
                             assert g.attrs[metric]<=1e-6
                         assert g.attrs['convergence_error']<=1e-6
                         assert error(a,h['Kinetic/S_total'][:])<=1e-6
-            for n in ['Martinez','Sandbem']:
-                assert h['availability/'+n].attrs['status']=='not_run' and n not in h
             for n in counts:
-                status=h['availability/'+n].attrs['status']
+                status='computed' if n in h else h['availability/'+n].attrs['status']
                 assert status in ['computed','unsupported'],(path,n,status)
                 assert (n in h)==(status=='computed')
             np.testing.assert_array_equal(h['pairwise_error'][:],[[error(a,b) for b in arrays] for a in arrays])
@@ -53,7 +61,7 @@ def main():
             figure=ROOT/'figures'/(oldpath.stem+'.'+ext)
             assert figure.stat().st_size>1000,figure
         print(oldpath.stem,'arrays, provenance, metrics and figures verified')
-    assert counts=={'Buchert':9,'Virtanen':8,'Nicolls':11,'Skolar':7,'inscar':5},counts
+    assert counts=={'Buchert':9,'Virtanen':8,'Martinez':7,'Nicolls':11,'Sandbem':11,'Skolar':7,'inscar':5},counts
     print('Coverage:',counts)
 
 

@@ -10,26 +10,13 @@ ne = 1e+11 m⁻³; Te = 2000 K; Ti = 1000 K; radar = 440.2 MHz; B = 0 μT; angle
 
 Upper panel: absolute spectrum per electron. Lower panel: absolute difference from Kinetic, divided by its peak. Ion-line views focus on the spectral feature; full grids are retained in HDF5. The plasma-line view leaves the unsampled central interval blank. Residuals below 10⁻¹⁶ are clipped to that plotting floor.
 
-| Code | Difference from Kinetic | Refinement change | Symmetry error |
-|---|---:|---:|---:|
-| Analytic | 🟩 1.80e-15 | — | 🟩 0.00e+00 |
-| Vierinen | 🟩 1.03e-14 | — | 🟩 0.00e+00 |
-| Swoboda | 🟩 1.44e-15 | — | 🟩 0.00e+00 |
-| Kinetic | reference | — | 🟩 0.00e+00 |
-| Buchert | 🟩 2.23e-09 | — | 🟩 0.00e+00 |
-| Virtanen | 🟥 1.46e-05 | — | 🟩 0.00e+00 |
-| Nicolls | 🟩 1.55e-07 | 2.32e-14 | 🟩 3.39e-15 |
-| Skolar | 🟩 7.97e-12 | 7.17e-11 | 🟩 0.00e+00 |
-| inscar | 🟩 9.88e-14 | 7.77e-14 | 🟩 0.00e+00 |
+![F region, 440.2 MHz: implementation comparison](figures/f_region_440.2MHz_table.png)
+
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
-[Spectrum arrays and full pairwise matrix](tables/expanded/f_region_440.2MHz.h5) · [Vector figure](figures/f_region_440.2MHz.svg)
+[Spectrum arrays and full pairwise matrix](tables/expanded/f_region_440.2MHz.h5) · [Vector figure](figures/f_region_440.2MHz.svg) · [Vector table](figures/f_region_440.2MHz_table.svg)
 
-| Unavailable code | Status | Reason |
-|---|---|---|
-| Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 
 inscar independent checks: cutoff refinement 6.87e-14; DC-limit sensitivity 1.97e-14. The grid-refinement measurement is shown above.
 
@@ -41,26 +28,13 @@ ne = 1e+11 m⁻³; Te = 2000 K; Ti = 1000 K; radar = 930 MHz; B = 0 μT; angle(k
 
 Upper panel: absolute spectrum per electron. Lower panel: absolute difference from Kinetic, divided by its peak. Ion-line views focus on the spectral feature; full grids are retained in HDF5. The plasma-line view leaves the unsampled central interval blank. Residuals below 10⁻¹⁶ are clipped to that plotting floor.
 
-| Code | Difference from Kinetic | Refinement change | Symmetry error |
-|---|---:|---:|---:|
-| Analytic | 🟩 1.80e-15 | — | 🟩 0.00e+00 |
-| Vierinen | 🟩 2.75e-14 | — | 🟩 0.00e+00 |
-| Swoboda | 🟩 1.80e-15 | — | 🟩 0.00e+00 |
-| Kinetic | reference | — | 🟩 0.00e+00 |
-| Buchert | 🟩 2.16e-09 | — | 🟩 0.00e+00 |
-| Virtanen | 🟥 1.31e-05 | — | 🟩 0.00e+00 |
-| Nicolls | 🟩 1.32e-07 | 1.31e-14 | 🟩 3.29e-18 |
-| Skolar | 🟩 3.59e-12 | 3.23e-11 | 🟩 0.00e+00 |
-| inscar | 🟩 1.44e-13 | 1.51e-13 | 🟩 0.00e+00 |
+![F region, 930 MHz: implementation comparison](figures/f_region_930MHz_table.png)
+
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
-[Spectrum arrays and full pairwise matrix](tables/expanded/f_region_930MHz.h5) · [Vector figure](figures/f_region_930MHz.svg)
+[Spectrum arrays and full pairwise matrix](tables/expanded/f_region_930MHz.h5) · [Vector figure](figures/f_region_930MHz.svg) · [Vector table](figures/f_region_930MHz_table.svg)
 
-| Unavailable code | Status | Reason |
-|---|---|---|
-| Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
 
 inscar independent checks: cutoff refinement 7.62e-14; DC-limit sensitivity 4.72e-15. The grid-refinement measurement is shown above.
 
@@ -72,26 +46,15 @@ ne = 1e+11 m⁻³; Te = 500 K; Ti = 500 K; radar = 440.2 MHz; B = 0 μT; angle(k
 
 Upper panel: absolute spectrum per electron. Lower panel: absolute difference from Kinetic, divided by its peak. Ion-line views focus on the spectral feature; full grids are retained in HDF5. The plasma-line view leaves the unsampled central interval blank. Residuals below 10⁻¹⁶ are clipped to that plotting floor.
 
-| Code | Difference from Kinetic | Refinement change | Symmetry error |
-|---|---:|---:|---:|
-| Analytic | 🟩 6.49e-16 | — | 🟩 0.00e+00 |
-| Vierinen | 🟩 9.58e-11 | — | 🟩 0.00e+00 |
-| Swoboda | 🟩 5.19e-16 | — | 🟩 0.00e+00 |
-| Kinetic | reference | — | 🟩 0.00e+00 |
-| Buchert | 🟩 1.24e-09 | — | 🟩 0.00e+00 |
-| Virtanen | 🟥 6.30e-06 | — | 🟩 0.00e+00 |
-| Nicolls | 🟩 2.90e-08 | 1.45e-14 | 🟩 7.92e-15 |
+![Molecular ions, 440.2 MHz: implementation comparison](figures/molecular_440.2MHz_table.png)
+
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
-[Spectrum arrays and full pairwise matrix](tables/expanded/molecular_440.2MHz.h5) · [Vector figure](figures/molecular_440.2MHz.svg)
+[Spectrum arrays and full pairwise matrix](tables/expanded/molecular_440.2MHz.h5) · [Vector figure](figures/molecular_440.2MHz.svg) · [Vector table](figures/molecular_440.2MHz_table.svg)
 
-| Unavailable code | Status | Reason |
-|---|---|---|
-| Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Skolar | unsupported | Native calcSpectra supports one ion species only. |
-| inscar | unsupported | Native SpectrumCalculation supports one ion species only. |
+Skolar: unsupported — Native calcSpectra supports one ion species only..
+inscar: unsupported — Native SpectrumCalculation supports one ion species only..
 
 ## Molecular ions, 930 MHz
 
@@ -101,26 +64,15 @@ ne = 1e+11 m⁻³; Te = 500 K; Ti = 500 K; radar = 930 MHz; B = 0 μT; angle(k,B
 
 Upper panel: absolute spectrum per electron. Lower panel: absolute difference from Kinetic, divided by its peak. Ion-line views focus on the spectral feature; full grids are retained in HDF5. The plasma-line view leaves the unsampled central interval blank. Residuals below 10⁻¹⁶ are clipped to that plotting floor.
 
-| Code | Difference from Kinetic | Refinement change | Symmetry error |
-|---|---:|---:|---:|
-| Analytic | 🟩 7.13e-16 | — | 🟩 0.00e+00 |
-| Vierinen | 🟩 3.14e-15 | — | 🟩 0.00e+00 |
-| Swoboda | 🟩 8.56e-16 | — | 🟩 0.00e+00 |
-| Kinetic | reference | — | 🟩 0.00e+00 |
-| Buchert | 🟩 1.24e-09 | — | 🟩 0.00e+00 |
-| Virtanen | 🟥 6.55e-06 | — | 🟩 0.00e+00 |
-| Nicolls | 🟩 6.34e-08 | 1.05e-14 | 🟩 5.07e-15 |
+![Molecular ions, 930 MHz: implementation comparison](figures/molecular_930MHz_table.png)
+
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
-[Spectrum arrays and full pairwise matrix](tables/expanded/molecular_930MHz.h5) · [Vector figure](figures/molecular_930MHz.svg)
+[Spectrum arrays and full pairwise matrix](tables/expanded/molecular_930MHz.h5) · [Vector figure](figures/molecular_930MHz.svg) · [Vector table](figures/molecular_930MHz_table.svg)
 
-| Unavailable code | Status | Reason |
-|---|---|---|
-| Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Skolar | unsupported | Native calcSpectra supports one ion species only. |
-| inscar | unsupported | Native SpectrumCalculation supports one ion species only. |
+Skolar: unsupported — Native calcSpectra supports one ion species only..
+inscar: unsupported — Native SpectrumCalculation supports one ion species only..
 
 ## Topside, 440.2 MHz
 
@@ -130,26 +82,15 @@ ne = 5e+10 m⁻³; Te = 3000 K; Ti = 1500 K; radar = 440.2 MHz; B = 0 μT; angle
 
 Upper panel: absolute spectrum per electron. Lower panel: absolute difference from Kinetic, divided by its peak. Ion-line views focus on the spectral feature; full grids are retained in HDF5. The plasma-line view leaves the unsampled central interval blank. Residuals below 10⁻¹⁶ are clipped to that plotting floor.
 
-| Code | Difference from Kinetic | Refinement change | Symmetry error |
-|---|---:|---:|---:|
-| Analytic | 🟩 1.14e-15 | — | 🟩 0.00e+00 |
-| Vierinen | 🟩 4.09e-14 | — | 🟩 0.00e+00 |
-| Swoboda | 🟩 1.47e-15 | — | 🟩 0.00e+00 |
-| Kinetic | reference | — | 🟩 0.00e+00 |
-| Buchert | 🟩 6.60e-10 | — | 🟩 0.00e+00 |
-| Virtanen | 🟥 4.39e-04 | — | 🟩 0.00e+00 |
-| Nicolls | 🟩 5.78e-08 | 2.31e-14 | 🟩 2.16e-14 |
+![Topside, 440.2 MHz: implementation comparison](figures/topside_440.2MHz_table.png)
+
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
-[Spectrum arrays and full pairwise matrix](tables/expanded/topside_440.2MHz.h5) · [Vector figure](figures/topside_440.2MHz.svg)
+[Spectrum arrays and full pairwise matrix](tables/expanded/topside_440.2MHz.h5) · [Vector figure](figures/topside_440.2MHz.svg) · [Vector table](figures/topside_440.2MHz_table.svg)
 
-| Unavailable code | Status | Reason |
-|---|---|---|
-| Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Skolar | unsupported | Native calcSpectra supports one ion species only. |
-| inscar | unsupported | Native SpectrumCalculation supports one ion species only. |
+Skolar: unsupported — Native calcSpectra supports one ion species only..
+inscar: unsupported — Native SpectrumCalculation supports one ion species only..
 
 ## Topside, 930 MHz
 
@@ -159,23 +100,12 @@ ne = 5e+10 m⁻³; Te = 3000 K; Ti = 1500 K; radar = 930 MHz; B = 0 μT; angle(k
 
 Upper panel: absolute spectrum per electron. Lower panel: absolute difference from Kinetic, divided by its peak. Ion-line views focus on the spectral feature; full grids are retained in HDF5. The plasma-line view leaves the unsampled central interval blank. Residuals below 10⁻¹⁶ are clipped to that plotting floor.
 
-| Code | Difference from Kinetic | Refinement change | Symmetry error |
-|---|---:|---:|---:|
-| Analytic | 🟩 7.39e-16 | — | 🟩 0.00e+00 |
-| Vierinen | 🟩 8.65e-14 | — | 🟩 0.00e+00 |
-| Swoboda | 🟩 8.45e-16 | — | 🟩 0.00e+00 |
-| Kinetic | reference | — | 🟩 0.00e+00 |
-| Buchert | 🟩 5.36e-10 | — | 🟩 0.00e+00 |
-| Virtanen | 🟥 3.18e-04 | — | 🟩 0.00e+00 |
-| Nicolls | 🟩 4.53e-08 | 1.15e-14 | 🟩 1.70e-16 |
+![Topside, 930 MHz: implementation comparison](figures/topside_930MHz_table.png)
+
 
 A dash means no new refinement measurement in this run; it does not establish numerical convergence. A red result is a sampled-spectrum discrepancy, not a diagnosis of its cause. The refinement column compares the two recorded numerical settings. Symmetry compares S(f) and S(−f), which should agree for these stationary cases; it is also measured rather than enforced.
 
-[Spectrum arrays and full pairwise matrix](tables/expanded/topside_930MHz.h5) · [Vector figure](figures/topside_930MHz.svg)
+[Spectrum arrays and full pairwise matrix](tables/expanded/topside_930MHz.h5) · [Vector figure](figures/topside_930MHz.svg) · [Vector table](figures/topside_930MHz_table.svg)
 
-| Unavailable code | Status | Reason |
-|---|---|---|
-| Martinez | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Sandbem | not_run | MATLAB execution cancelled at user request after license failures; no spectrum evaluated. |
-| Skolar | unsupported | Native calcSpectra supports one ion species only. |
-| inscar | unsupported | Native SpectrumCalculation supports one ion species only. |
+Skolar: unsupported — Native calcSpectra supports one ion species only..
+inscar: unsupported — Native SpectrumCalculation supports one ion species only..

@@ -136,6 +136,9 @@ def collect():
             h.attrs['pass_tolerance']=1e-6
             stamp(h,records,'additional.py')
             print(case['name'],names,flush=True)
+    if (ROOT/'tables/octave').exists():
+        from merge_octave import main as merge_octave
+        merge_octave()
 
 
 if __name__=='__main__':

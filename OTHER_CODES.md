@@ -6,8 +6,8 @@ scatter spectra; packages that only read or plot measured ISR data are excluded.
 
 **Execution status:** Buchert, Virtanen's R/C program, Nicolls, Skolar and inscar
 now have [numerical comparisons](README.md) and [documented adapters](NEW_CODES.md).
-Martinez and Sandbem are listed as not run following cancellation of MATLAB
-execution. Remaining entries are catalog only. Capabilities below describe
+Martinez and Sandbem now have measured comparisons from their original MATLAB
+sources run under GNU Octave on avaruus. Remaining entries are catalog only. Capabilities below describe
 the inspected implementation or its author's documentation, not verified accuracy.
 
 ## Calculators and implementations

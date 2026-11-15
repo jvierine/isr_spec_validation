@@ -14,7 +14,11 @@ def verify_provenance():
            'Swoboda':ROOT/'.cache/swoboda'}
     from additional_sources import SOURCES
     repos.update({name:ROOT/'.cache'/entry[2] for name,entry in SOURCES.items()})
-    for path in sorted((ROOT/'tables').rglob('*.h5')):
+    # Expanded and Octave products have their own provenance and numerical gates.
+    original_paths = [p for p in (ROOT/'tables').glob('*.h5') if p.with_suffix('.txt').exists()]
+    original_paths += list((ROOT/'tables/comparison').glob('*.h5'))
+    original_paths += list((ROOT/'tables/extended').glob('*.h5'))
+    for path in sorted(original_paths):
         with h5py.File(path) as h:
             for group in [h]+([h['refined']] if 'refined' in h else []):
                 assert 'provenance' in group, (path,group.name)

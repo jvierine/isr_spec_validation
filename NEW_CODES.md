@@ -6,10 +6,10 @@ retains the earlier upstream results and separates numerical resolution from
 the permittivity effect. The PR is identified explicitly rather than treated as a released version.
 
 Buchert, Virtanen, Nicolls, Skolar and inscar were evaluated using their native
-Julia, R/C or Python implementations. Martinez and Sandbem (the ISRTS account,
-interpreted from “sandberry”) are explicit **not run** entries. MATLAB execution
-was cancelled after the installations checked on Revontuli failed licensing.
-No MATLAB output is included or replaced by a translation.
+Julia, R/C or Python implementations. Martinez and Sandbem were evaluated from
+their original MATLAB sources under GNU Octave 11.1 on avaruus. The compatibility
+functions in [octave/](octave/) supply Dawson's integral, exact case ion masses,
+correct multi-ion array shape, and stricter Sommerfeld quadrature.
 
 The six existing unmagnetized ion-line cases and five existing extended cases
 are reused without changing plasma parameters, mass definitions or frequency
@@ -26,13 +26,20 @@ their ion/electron components are not fabricated. All data products are HDF5.
 | Nicolls | [ISR-school ISspec](https://github.com/isrsummerschool/lecture_supplements_2024/tree/5f02f3edaf09cc5b3f03617f50e9412ec12df4bd/is_spectral_model) | 11 | Coulomb collisions disabled, consistent with these tests. |
 | Skolar | [crskolar/OO_Collisions](https://github.com/crskolar/OO_Collisions/tree/e3e212f6c31d364c2bd48f01b3ebafdf9769f533) | 7 | Native `calcSpectra` combines one ion species with electrons. Mixtures are omitted. |
 | inscar | [PR #537 commit](https://github.com/jvierine/inscar/tree/532412a280a7e3373595fbaff763bcf12471622e) | 5 | One ion species; the inspected collision formula is not the number-conserving neutral BGK operator used here. |
-| Martinez | [ISR_Model](https://github.com/miguel-martinez-ledesma/ISR_Model/tree/369e277c7d388b7b3e4c63d5402b31304ef954ef) | 0 | Not run: MATLAB execution cancelled. |
-| Sandbem | [ISRTS](https://github.com/Sandbem/ISRTS/tree/d31ddafa87be19c957bb1949dcddc29a2f518432) | 0 | Not run: MATLAB execution cancelled. |
+| Martinez | [ISR_Model](https://github.com/miguel-martinez-ledesma/ISR_Model/tree/369e277c7d388b7b3e4c63d5402b31304ef954ef) | 7 | Collisionless unmagnetized cases only. |
+| Sandbem | [ISRTS](https://github.com/Sandbem/ISRTS/tree/d31ddafa87be19c957bb1949dcddc29a2f518432) | 11 | Magnetic adapter uses the source Sommerfeld mode. |
 
 Coverage means successful evaluation, **not agreement**. Unsupported cases are
 recorded separately from not-run programs. These restrictions describe the
 invoked interfaces and matched physics, not every possible use of a package.
-Shared ancestry also means these are not nine independent theoretical derivations.
+Shared ancestry also means these are not eleven independent theoretical derivations.
+
+The [six-case pairwise matrix](figures/pairwise_ionline.png) compares all eleven
+implementations on shared unmagnetized ion-line cases. The [thirteen-case
+matrix](figures/pairwise_all.png) includes magnetic, collisional, plasma-line,
+and near-perpendicular tests. Each cell reports the worst sampled-spectrum
+error and the number of cases common to that pair. Numerical values and case
+names are retained in [HDF5](tables/pairwise_summary.h5).
 
 ## Units, limits and numerical settings
 
@@ -100,6 +107,20 @@ remain in their original HDF5 files. Missing refinement values for added R
 and Julia calculations mean “not assessed”, not exact evaluation.
 
 ## Reproduction
+
+On avaruus, install GNU Octave and the pinned source checkouts with
+additional.py prepare, then run octave_validation.py. The script pins each
+process to one logical CPU on Linux and records seven warmed kernel-call times
+per implementation and case. The timer excludes interpreter startup and HDF5
+I/O. The [timing figure](figures/octave_timing.png) identifies avaruus and its
+CPU. It covers Analytic, Kinetic, Martinez and Sandbem; no cross-language
+runtime benchmark is asserted for the other seven. The near-perpendicular
+case uses 89 degrees from B and has a B=0 control. Its enhancement is a
+lower-hybrid-sensitive edge case, not an independent mode identification.
+
+Run pairwise_summary.py to regenerate the matrix data, then the Rustplotlib
+pairwise_tables, octave_tables, case_tables and near_perp binaries to render
+their PNG and SVG figures.
 
 Run from the repository root. Python uses base conda. Commit source before
 collection: hashes are checked against Git. First reproduce original data with
