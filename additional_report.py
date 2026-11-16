@@ -128,9 +128,18 @@ def main():
             '[Vector all-case matrix](figures/pairwise_all.svg) · [Machine-readable pairwise summary](tables/pairwise_summary.h5)','',
             'The thirteen-case matrix includes a 1° from perpendicular-to-B test and its unmagnetized control. '
             'Cells have different shared-case counts because implementations have different physical scope.','',
-            '## Single-thread timing on avaruus','','Each timing is a median of seven warmed calls pinned to one logical CPU. '
-            'The timer excludes Octave startup and HDF5 I/O. Only Analytic, Kinetic, Martinez and Sandbem were benchmarked in this run; '
-            'the other implementations appear in both agreement matrices.','',
+            '## Standard F-region O⁺ spectrum speed','',
+            'All eleven implementations were timed on avaruus for the same 440.2 MHz, 801-frequency F-region case. '
+            'Each call used one pinned logical CPU, with startup, compilation and HDF5 I/O excluded. '
+            'The R/C result uses the median of seven 100-call batches; the other results use medians of seven warmed calls. '
+            'Each output was checked against its saved comparison spectrum. Different numerical algorithms and refinement settings '
+            'affect these times, so speed alone does not measure accuracy.','',
+            '![Standard F-region spectrum speed for all eleven implementations](figures/f_region_speed.png)','',
+            '[Vector speed table](figures/f_region_speed.svg) · [Times and provenance in HDF5](tables/speed_standard_f_region.h5) · '
+            '[Reproduce the benchmark](NEW_CODES.md#standard-f-region-speed-benchmark)','',
+            '## Timing across cases','','The thirteen-case timing table covers Analytic, Kinetic, Martinez and Sandbem. '
+            'Those results are medians of seven warmed calls on one pinned avaruus logical CPU; '
+            'startup and HDF5 I/O are excluded.','',
             '![Single-thread execution time by case](figures/octave_timing.png)','',
             '[Vector timing table](figures/octave_timing.svg)','',
             '## Near-perpendicular magnetic edge case','','At 89° from B, the spectrum has narrow enhanced features near the lower-hybrid frequency. '

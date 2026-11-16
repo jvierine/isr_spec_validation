@@ -108,6 +108,40 @@ and Julia calculations mean “not assessed”, not exact evaluation.
 
 ## Reproduction
 
+### Standard F-region speed benchmark
+
+The [speed table](figures/f_region_speed.png) times all eleven implementations
+on avaruus for the same O+ case: ne = 1e11 m^-3, Te = 2000 K, Ti = 1000 K,
+440.2 MHz radar, B = 0, and 801 frequencies from -100 to +100 kHz. All
+processes were pinned to logical CPU 0 on the AMD EPYC 9754 host with one
+numerical-library thread. One untimed call warmed the function, and seven
+calls were timed in each Python, Julia, or Octave runtime. The fast R/C
+function was timed in seven batches of 100 calls; each batch duration was
+divided by 100 before taking the median. Startup, compilation, and HDF5 I/O
+are excluded. Every computed spectrum was checked against its saved product.
+The measured distributions, runtimes, source identity and settings are in
+[HDF5](tables/speed_standard_f_region.h5). These are times at the documented
+numerical settings; speed comparisons do not by themselves establish equal
+accuracy.
+
+To reproduce on avaruus after preparing the pinned source checkouts and
+installing the runtimes and Python dependencies:
+
+```sh
+.venv/bin/python benchmark_f_region.py
+mkdir -p .cache/virtanen-native
+cc -O2 -shared -fPIC .cache/ISspectrum/src/spec_worker.c .cache/ISspectrum/src/transf_worker.c -lm -o .cache/virtanen-native/ISspectrum.so
+taskset -c 0 Rscript benchmark_f_region.R
+JULIA_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 taskset -c 0 julia +1.12.4 --project=runtimes/julia benchmark_f_region.jl
+conda run -n base python collect_f_region_speed.py
+cargo run --release --locked --manifest-path plots/Cargo.toml --bin f_region_speed
+```
+
+Martinez and Sandbem timings are taken from the same avaruus Octave run as
+their saved spectra in tables/octave/f_region_440.2MHz.h5. The Julia result
+used Julia 1.12.4 and the R/C result used R 4.5.2. The benchmark scripts
+retain warm-up and spectrum equality checks.
+
 On avaruus, install GNU Octave and the pinned source checkouts with
 additional.py prepare, then run octave_validation.py. The script pins each
 process to one logical CPU on Linux and records seven warmed kernel-call times
