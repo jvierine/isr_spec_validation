@@ -139,6 +139,9 @@ def collect():
     if (ROOT/'tables/octave').exists():
         from merge_octave import main as merge_octave
         merge_octave()
+    if (ROOT/'tables/eiscat').exists():
+        from merge_eiscat import main as merge_eiscat
+        merge_eiscat()
 
 
 if __name__=='__main__':

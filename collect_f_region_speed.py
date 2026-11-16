@@ -8,17 +8,19 @@ import numpy as np
 from compare import ROOT, error
 
 ORDER = ['Analytic', 'Vierinen', 'Swoboda', 'Kinetic', 'Buchert',
-         'Virtanen', 'Martinez', 'Nicolls', 'Sandbem', 'Skolar', 'inscar']
+         'Virtanen', 'Martinez', 'Nicolls', 'Sandbem', 'Skolar', 'inscar', 'EISCAT']
 INPUTS = {
     'python': ROOT / 'tables/speed_f_region_440.2MHz.h5',
     'r': ROOT / 'tables/speed_virtanen.h5',
     'julia': ROOT / 'tables/speed_buchert.h5',
     'octave': ROOT / 'tables/octave/f_region_440.2MHz.h5',
+    'eiscat': ROOT / 'tables/eiscat/f_region_440.2MHz.h5',
 }
 SOURCE = {name: lang for lang, names in {
     'python': ['Analytic', 'Vierinen', 'Swoboda', 'Kinetic', 'Nicolls', 'Skolar', 'inscar'],
     'r': ['Virtanen'], 'julia': ['Buchert'],
     'octave': ['Martinez', 'Sandbem'],
+    'eiscat': ['EISCAT'],
 }.items() for name in names}
 
 
@@ -26,9 +28,10 @@ def main():
     target = ROOT / 'tables/speed_standard_f_region.h5'
     with h5py.File(INPUTS['python']) as py, h5py.File(INPUTS['r']) as rr, \
          h5py.File(INPUTS['julia']) as jj, h5py.File(INPUTS['octave']) as oo, \
+         h5py.File(INPUTS['eiscat']) as ee, \
          h5py.File(ROOT / 'tables/expanded/f_region_440.2MHz.h5') as expanded, \
          h5py.File(target, 'w') as out:
-        sources = {'python': py, 'r': rr, 'julia': jj, 'octave': oo}
+        sources = {'python': py, 'r': rr, 'julia': jj, 'octave': oo, 'eiscat': ee}
         model = py.attrs['cpu_model']
         assert model == oo.attrs['cpu_model']
         out.attrs['host'] = 'avaruus'
@@ -53,7 +56,7 @@ def main():
         for name in ORDER:
             kind = SOURCE[name]
             src = sources[kind][name]
-            if kind == 'octave':
+            if kind in ('octave','eiscat'):
                 assert src.attrs['status'] == 'computed'
             vals = src['elapsed_s'][:]
             assert np.isfinite(vals).all() and (vals > 0).all()
@@ -64,11 +67,12 @@ def main():
             g.attrs['median_elapsed_s'] = median
             g.attrs['min_elapsed_s'] = float(vals.min())
             g.attrs['max_elapsed_s'] = float(vals.max())
-            g.attrs['runtime'] = kind
-            g.attrs['measurement_method'] = sources[kind].attrs.get('timing_scope',
-                sources[kind].attrs.get('benchmark_mode', 'seven warmed in-process calls'))
+            g.attrs['runtime'] = 'octave' if kind=='eiscat' else kind
+            g.attrs['measurement_method'] = src.attrs.get('timing_scope',
+                sources[kind].attrs.get('timing_scope',
+                sources[kind].attrs.get('benchmark_mode', 'seven warmed in-process calls')))
             measured_error = (error(src['S_total'][:], expanded[name]['S_total'][:])
-                              if kind == 'octave' else float(np.asarray(src.attrs['error_vs_saved']).item()))
+                              if kind in ('octave','eiscat') else float(np.asarray(src.attrs['error_vs_saved']).item()))
             g.attrs['error_vs_saved'] = measured_error
             assert g.attrs['error_vs_saved'] <= 1e-6
             if name in expanded['provenance']:

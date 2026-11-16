@@ -6,8 +6,8 @@ scatter spectra; packages that only read or plot measured ISR data are excluded.
 
 **Execution status:** Buchert, Virtanen's R/C program, Nicolls, Skolar and inscar
 now have [numerical comparisons](README.md) and [documented adapters](NEW_CODES.md).
-Martinez and Sandbem now have measured comparisons from their original MATLAB
-sources run under GNU Octave on avaruus. Remaining entries are catalog only. Capabilities below describe
+Martinez, Sandbem and EISCAT GUISDAP9 now have measured comparisons from their
+original MATLAB sources run under GNU Octave on avaruus. Remaining entries are catalog only. Capabilities below describe
 the inspected implementation or its author's documentation, not verified accuracy.
 
 ## Calculators and implementations
@@ -137,7 +137,8 @@ Git ignore file when inspected.
 
 ### GUISDAP and its interfaces
 
-[EISCAT GUISDAP](https://gitlab.com/eiscat/guisdap9) is the parent analysis suite
+[EISCAT GUISDAP](https://gitlab.com/eiscat/guisdap9) is now measured directly
+on seven supported collisionless unmagnetized cases. It is the parent analysis suite
 for the spectrum routines exposed by the following two packages. Its role is
 documented in [Lehtinen and Huuskonen (1996)](https://doi.org/10.1016/0021-9169(95)00047-X).
 These interfaces are useful access routes to the model, but are not independent

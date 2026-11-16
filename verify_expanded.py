@@ -10,7 +10,7 @@ from additional_sources import record
 
 
 def main():
-    counts={n:0 for n in ['Buchert','Virtanen','Martinez','Nicolls','Sandbem','Skolar','inscar']}
+    counts={n:0 for n in ['Buchert','Virtanen','Martinez','Nicolls','Sandbem','Skolar','inscar','EISCAT']}
     for category,oldpath,case in cases():
         path=ROOT/'tables/expanded'/oldpath.name
         with h5py.File(path) as h,h5py.File(oldpath) as old:
@@ -34,6 +34,14 @@ def main():
                         assert len(g['elapsed_s'])==7
                         assert hashlib.sha256((ROOT/'octave/octave_kernel.m').read_bytes()).hexdigest()==g.attrs['adapter_sha256']
                         assert hashlib.sha256((ROOT/'.cache'/('ISR_Model' if name=='Martinez' else 'ISRTS')/g.attrs['code_path']).read_bytes()).hexdigest()==g.attrs['code_sha256']
+                        continue
+                    if name=='EISCAT':
+                        assert g.attrs['host']=='avaruus' and g.attrs['threads_per_call']==1
+                        assert len(g['elapsed_s'])==7 and g.attrs['median_elapsed_s']>0
+                        assert hashlib.sha256((ROOT/'octave/eiscat_case.m').read_bytes()).hexdigest()==g.attrs['adapter_sha256']
+                        with h5py.File(ROOT/'tables/eiscat'/path.name) as measured:
+                            np.testing.assert_array_equal(a,measured['EISCAT/S_total'][:])
+                            assert g.attrs['code_sha256']==measured['EISCAT'].attrs['code_sha256']
                         continue
                     r=record(name)
                     for k,v in r.items():
@@ -61,7 +69,7 @@ def main():
             figure=ROOT/'figures'/(oldpath.stem+'.'+ext)
             assert figure.stat().st_size>1000,figure
         print(oldpath.stem,'arrays, provenance, metrics and figures verified')
-    assert counts=={'Buchert':9,'Virtanen':8,'Martinez':7,'Nicolls':11,'Sandbem':11,'Skolar':7,'inscar':5},counts
+    assert counts=={'Buchert':9,'Virtanen':8,'Martinez':7,'Nicolls':11,'Sandbem':11,'Skolar':7,'inscar':5,'EISCAT':7},counts
     print('Coverage:',counts)
 
 

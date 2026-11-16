@@ -7,7 +7,7 @@ import numpy as np
 from compare import ROOT, error
 
 NAMES = ['Analytic', 'Vierinen', 'Swoboda', 'Kinetic', 'Buchert',
-         'Virtanen', 'Martinez', 'Nicolls', 'Sandbem', 'Skolar', 'inscar']
+         'Virtanen', 'Martinez', 'Nicolls', 'Sandbem', 'Skolar', 'inscar', 'EISCAT']
 
 
 def inputs(scope):
@@ -34,6 +34,11 @@ def main():
             for path in paths:
                 with h5py.File(path) as h:
                     spectra = {name: h[name + '/S_total'][:] for name in NAMES if name in h}
+                    external = ROOT / 'tables/eiscat' / path.name
+                    if 'EISCAT' not in spectra and external.exists():
+                        with h5py.File(external) as e:
+                            np.testing.assert_array_equal(e['frequency_hz'][:], h['frequency_hz'][:])
+                            spectra['EISCAT'] = e['EISCAT/S_total'][:]
                     for i, a in enumerate(NAMES):
                         for j in range(i + 1, len(NAMES)):
                             b = NAMES[j]

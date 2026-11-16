@@ -5,7 +5,7 @@ import numpy as np
 from compare import ROOT, error
 from additional_sources import SOURCES
 
-NAMES=['Analytic','Vierinen','Swoboda','Kinetic','Buchert','Virtanen','Martinez','Nicolls','Sandbem','Skolar','inscar']
+NAMES=['Analytic','Vierinen','Swoboda','Kinetic','Buchert','Virtanen','Martinez','Nicolls','Sandbem','Skolar','inscar','EISCAT']
 TITLES={'f_region':'F region','molecular':'Molecular ions','topside':'Topside',
         'magnetic_42deg':'Magnetic field, 42° from B','magnetic_85deg':'Magnetic field, 85° from B',
         'neutral_bgk_42deg':'Neutral BGK collisions, 42° from B',
@@ -74,7 +74,7 @@ def case_lines(path):
                 f'[Spectrum arrays and full pairwise matrix](tables/expanded/{path.name}) · [Vector figure](figures/{path.stem}.svg) · [Vector table](figures/{path.stem}_table.svg)','']
         for name,g in h['availability'].items():
             if g.attrs['status']!='computed':
-                lines.append(f"{name}: {g.attrs['status']} — {g.attrs['reason']}.")
+                lines.append(f"{name}: {g.attrs['status']} — {str(g.attrs['reason']).rstrip('.')}.")
         if 'inscar' in h:
             a=h['inscar'].attrs
             lines+=['',f"inscar independent checks: cutoff refinement {a['cutoff_convergence_error']:.2e}; "
@@ -101,13 +101,13 @@ def main():
         (ROOT/filename).write_text('\n'.join(lines))
     lines=['# ISR spectrum validation','',
            'This is an effort to document and cross-validate different open source incoherent scatter radar spectrum calculation programs and provide a way for anyone implemented such a program to be able to compare their result with others -- without trying to get the numbers out of a plot in a scientific article.','',
-           '[![Eleven-code comparison of the F-region spectrum at 440.2 MHz, with residuals](figures/f_region_440.2MHz.png)](figures/f_region_440.2MHz.svg)','',
+           '[![Twelve-code comparison of the F-region spectrum at 440.2 MHz, with residuals](figures/f_region_440.2MHz.png)](figures/f_region_440.2MHz.svg)','',
            '**F-region comparison at 440.2 MHz.** O⁺ plasma with ne = 10¹¹ m⁻³, Te = 2000 K and Ti = 1000 K, '
-           'without magnetic field, collisions or drift. The upper panel overlays all eleven evaluated implementations; '
+           'without magnetic field, collisions or drift. The upper panel overlays all twelve evaluated implementations; '
            'the lower panel shows their absolute differences from Kinetic, divided by its peak. '
            'Nearly coincident spectra are distinguished by the residuals. [Case details](COMPARISON_RESULTS.md#f-region-4402-mhz).','',
-           'Eleven implementations evaluated across eleven prescribed Maxwellian tests. '
-           'The Martinez and Sandbem MATLAB implementations run through GNU Octave. '
+           'Twelve implementations evaluated across eleven prescribed Maxwellian tests. '
+           'The Martinez, Sandbem and EISCAT GUISDAP MATLAB implementations run through GNU Octave. '
            'Each test has a spectrum overlay and a residual panel. Coverage differs where an adapter does not support the prescribed physics.','',
            '[Six ion-line tests and plots](COMPARISON_RESULTS.md) · [Five magnetic, collision and plasma-line tests and plots](EXTENDED_RESULTS.md)','',
            *quickstart_lines(),
@@ -127,14 +127,15 @@ def main():
             '![Pairwise matrix for all thirteen cases](figures/pairwise_all.png)','',
             '[Vector all-case matrix](figures/pairwise_all.svg) · [Machine-readable pairwise summary](tables/pairwise_summary.h5)','',
             'The thirteen-case matrix includes a 1° from perpendicular-to-B test and its unmagnetized control. '
-            'Cells have different shared-case counts because implementations have different physical scope.','',
+            'Cells have different shared-case counts because implementations have different physical scope. '
+            'EISCAT GUISDAP and the Virtanen R/C implementation share GUISDAP ancestry.','',
             '## Standard F-region O⁺ spectrum speed','',
-            'All eleven implementations were timed on avaruus for the same 440.2 MHz, 801-frequency F-region case. '
+            'All twelve implementations were timed on avaruus for the same 440.2 MHz, 801-frequency F-region case. '
             'Each call used one pinned logical CPU, with startup, compilation and HDF5 I/O excluded. '
             'The R/C result uses the median of seven 100-call batches; the other results use medians of seven warmed calls. '
             'Each output was checked against its saved comparison spectrum. Different numerical algorithms and refinement settings '
             'affect these times, so speed alone does not measure accuracy.','',
-            '![Standard F-region spectrum speed for all eleven implementations](figures/f_region_speed.png)','',
+            '![Standard F-region spectrum speed for all twelve implementations](figures/f_region_speed.png)','',
             '[Vector speed table](figures/f_region_speed.svg) · [Times and provenance in HDF5](tables/speed_standard_f_region.h5) · '
             '[Reproduce the benchmark](NEW_CODES.md#standard-f-region-speed-benchmark)','',
             '## Timing across cases','','The thirteen-case timing table covers Analytic, Kinetic, Martinez and Sandbem. '

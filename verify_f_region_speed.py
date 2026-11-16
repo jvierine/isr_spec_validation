@@ -1,4 +1,4 @@
-"""Audit the published eleven-code F-region timing product."""
+"""Audit the published F-region timing product."""
 import h5py
 import numpy as np
 
@@ -32,7 +32,7 @@ def main():
                                        ref/h[name].attrs['median_elapsed_s'], rtol=1e-12)
     for ext in ['png', 'svg']:
         assert (ROOT / 'figures' / ('f_region_speed.' + ext)).stat().st_size > 1000
-    print('Eleven avaruus CPU-0 timings, spectra, provenance, and Rustplotlib table verified')
+    print(f'{len(ORDER)} avaruus CPU-0 timings, spectra, provenance, and Rustplotlib table verified')
 
 
 if __name__ == '__main__':

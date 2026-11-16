@@ -9,7 +9,9 @@ Buchert, Virtanen, Nicolls, Skolar and inscar were evaluated using their native
 Julia, R/C or Python implementations. Martinez and Sandbem were evaluated from
 their original MATLAB sources under GNU Octave 11.1 on avaruus. The compatibility
 functions in [octave/](octave/) supply Dawson's integral, exact case ion masses,
-correct multi-ion array shape, and stricter Sommerfeld quadrature.
+correct multi-ion array shape, and stricter Sommerfeld quadrature. EISCAT's
+GUISDAP9 source is also run under Octave with its original dispersion tables;
+the adapter selects the source's pure MATLAB spectrum branch.
 
 The six existing unmagnetized ion-line cases and five existing extended cases
 are reused without changing plasma parameters, mass definitions or frequency
@@ -28,13 +30,16 @@ their ion/electron components are not fabricated. All data products are HDF5.
 | inscar | [PR #537 commit](https://github.com/jvierine/inscar/tree/532412a280a7e3373595fbaff763bcf12471622e) | 5 | One ion species; the inspected collision formula is not the number-conserving neutral BGK operator used here. |
 | Martinez | [ISR_Model](https://github.com/miguel-martinez-ledesma/ISR_Model/tree/369e277c7d388b7b3e4c63d5402b31304ef954ef) | 7 | Collisionless unmagnetized cases only. |
 | Sandbem | [ISRTS](https://github.com/Sandbem/ISRTS/tree/d31ddafa87be19c957bb1949dcddc29a2f518432) | 11 | Magnetic adapter uses the source Sommerfeld mode. |
+| EISCAT | [GUISDAP9](https://gitlab.com/eiscat/guisdap9/-/tree/a9c4415ab6564e6a154152ca3ac569ee442a658f) | 7 | The callable spectrum interface is evaluated for collisionless unmagnetized cases. |
 
 Coverage means successful evaluation, **not agreement**. Unsupported cases are
 recorded separately from not-run programs. These restrictions describe the
 invoked interfaces and matched physics, not every possible use of a package.
-Shared ancestry also means these are not eleven independent theoretical derivations.
+Shared ancestry also means these are not twelve independent theoretical derivations.
+EISCAT GUISDAP9 and Virtanen's R/C interface share GUISDAP ancestry and
+should not be counted as independent physical theories.
 
-The [six-case pairwise matrix](figures/pairwise_ionline.png) compares all eleven
+The [six-case pairwise matrix](figures/pairwise_ionline.png) compares all twelve
 implementations on shared unmagnetized ion-line cases. The [thirteen-case
 matrix](figures/pairwise_all.png) includes magnetic, collisional, plasma-line,
 and near-perpendicular tests. Each cell reports the worst sampled-spectrum
@@ -110,7 +115,7 @@ and Julia calculations mean “not assessed”, not exact evaluation.
 
 ### Standard F-region speed benchmark
 
-The [speed table](figures/f_region_speed.png) times all eleven implementations
+The [speed table](figures/f_region_speed.png) times all twelve implementations
 on avaruus for the same O+ case: ne = 1e11 m^-3, Te = 2000 K, Ti = 1000 K,
 440.2 MHz radar, B = 0, and 801 frequencies from -100 to +100 kHz. All
 processes were pinned to logical CPU 0 on the AMD EPYC 9754 host with one
@@ -138,9 +143,24 @@ cargo run --release --locked --manifest-path plots/Cargo.toml --bin f_region_spe
 ```
 
 Martinez and Sandbem timings are taken from the same avaruus Octave run as
-their saved spectra in tables/octave/f_region_440.2MHz.h5. The Julia result
+their saved spectra in tables/octave/f_region_440.2MHz.h5. EISCAT timing and
+spectrum are in tables/eiscat/f_region_440.2MHz.h5. The GUISDAP9 source
+and its plasma-dispersion tables remain outside Git; the HDF5 product records
+its commit and source/table hashes. The native density-scaled GUISDAP output
+is divided by ne, without fitted scaling. The F-region difference from Kinetic
+is 3.41e-5 and the plasma-line difference is 1.01e-3 on the sampled grids.
+These discrepancies are measurements, not a diagnosis of their cause. The Julia result
 used Julia 1.12.4 and the R/C result used R 4.5.2. The benchmark scripts
 retain warm-up and spectrum equality checks.
+
+To rerun EISCAT on avaruus with the installed source and prepared HDF5 inputs:
+
+```sh
+EISCAT_GUISDAP_ROOT=/home/j/src/guisdap26/legacy/guisdap9 .venv/bin/python eiscat_validation.py
+conda run -n base python merge_eiscat.py
+conda run -n base python pairwise_summary.py
+conda run -n base python collect_f_region_speed.py
+```
 
 On avaruus, install GNU Octave and the pinned source checkouts with
 additional.py prepare, then run octave_validation.py. The script pins each

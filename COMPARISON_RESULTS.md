@@ -53,8 +53,8 @@ A dash means no new refinement measurement in this run; it does not establish nu
 
 [Spectrum arrays and full pairwise matrix](tables/expanded/molecular_440.2MHz.h5) · [Vector figure](figures/molecular_440.2MHz.svg) · [Vector table](figures/molecular_440.2MHz_table.svg)
 
-Skolar: unsupported — Native calcSpectra supports one ion species only..
-inscar: unsupported — Native SpectrumCalculation supports one ion species only..
+Skolar: unsupported — Native calcSpectra supports one ion species only.
+inscar: unsupported — Native SpectrumCalculation supports one ion species only.
 
 ## Molecular ions, 930 MHz
 
@@ -71,8 +71,8 @@ A dash means no new refinement measurement in this run; it does not establish nu
 
 [Spectrum arrays and full pairwise matrix](tables/expanded/molecular_930MHz.h5) · [Vector figure](figures/molecular_930MHz.svg) · [Vector table](figures/molecular_930MHz_table.svg)
 
-Skolar: unsupported — Native calcSpectra supports one ion species only..
-inscar: unsupported — Native SpectrumCalculation supports one ion species only..
+Skolar: unsupported — Native calcSpectra supports one ion species only.
+inscar: unsupported — Native SpectrumCalculation supports one ion species only.
 
 ## Topside, 440.2 MHz
 
@@ -89,8 +89,8 @@ A dash means no new refinement measurement in this run; it does not establish nu
 
 [Spectrum arrays and full pairwise matrix](tables/expanded/topside_440.2MHz.h5) · [Vector figure](figures/topside_440.2MHz.svg) · [Vector table](figures/topside_440.2MHz_table.svg)
 
-Skolar: unsupported — Native calcSpectra supports one ion species only..
-inscar: unsupported — Native SpectrumCalculation supports one ion species only..
+Skolar: unsupported — Native calcSpectra supports one ion species only.
+inscar: unsupported — Native SpectrumCalculation supports one ion species only.
 
 ## Topside, 930 MHz
 
@@ -107,5 +107,5 @@ A dash means no new refinement measurement in this run; it does not establish nu
 
 [Spectrum arrays and full pairwise matrix](tables/expanded/topside_930MHz.h5) · [Vector figure](figures/topside_930MHz.svg) · [Vector table](figures/topside_930MHz_table.svg)
 
-Skolar: unsupported — Native calcSpectra supports one ion species only..
-inscar: unsupported — Native SpectrumCalculation supports one ion species only..
+Skolar: unsupported — Native calcSpectra supports one ion species only.
+inscar: unsupported — Native SpectrumCalculation supports one ion species only.

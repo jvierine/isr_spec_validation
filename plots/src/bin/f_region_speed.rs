@@ -26,18 +26,18 @@ fn main() -> Result<()> {
     rows.sort_by(|a,b| a.1.total_cmp(&b.1));
     let reference = h.group("Kinetic")?.attr("median_elapsed_s")?.read_scalar::<f64>()?;
     let mut fig = Figure::new(IntendedUse::Custom { width_mm: 195., font_pt: 9. });
-    fig.height_mm = 134.;
+    fig.height_mm = 145.;
     fig.labels.push(Label::new("Standard F-region O+ spectrum: execution time", 97.5, 6.));
     fig.labels.push(Label::new("440.2 MHz; 801 frequencies; single-thread avaruus, AMD EPYC 9754", 97.5, 14.));
     fig.labels.push(Label::new("Electron density 1e11 per cubic metre; Te 2000 K; Ti 1000 K; B=0", 97.5, 20.));
-    let mut p = Panel::new(Rect::new(7., 26., 181., 91.), Axes::new([0.,1.],[0.,12.],"",""));
+    let mut p = Panel::new(Rect::new(7., 26., 181., 101.), Axes::new([0.,1.],[0.,13.],"",""));
     p.axes_visible = false;
     let xx = [0.15,0.38,0.60,0.82];
     for (j,head) in ["Implementation","Runtime","Median per spectrum","Kinetic / time"].iter().enumerate() {
-        p.label_at(*head,[xx[j],11.5]);
+        p.label_at(*head,[xx[j],12.5]);
     }
     for (i,(name,median,min,max,runtime)) in rows.iter().enumerate() {
-        let y = 10.5-i as f64;
+        let y = 11.5-i as f64;
         p.label_at(name.clone(),[xx[0],y]);
         let label = match runtime.as_str() { "python"=>"Python", "r"=>"R/C", "julia"=>"Julia", "octave"=>"Octave", _=>runtime };
         p.label_at(label,[xx[1],y]);
@@ -48,11 +48,11 @@ fn main() -> Result<()> {
         let mut line=Line::new(vec![[0.01,y-0.5],[0.99,y-0.5]],"#d9dfe2");
         line.width_pt=0.3; p.push(Layer::Line(line));
     }
-    let mut rule=Line::new(vec![[0.01,11.],[0.99,11.]],"#526775");
+    let mut rule=Line::new(vec![[0.01,12.],[0.99,12.]],"#526775");
     rule.width_pt=0.8; p.push(Layer::Line(rule));
     fig.panels.push(p);
-    fig.labels.push(Label::new("Median of warmed calls on CPU 0; startup and HDF5 I/O excluded",97.5,122.));
-    fig.labels.push(Label::new("Outputs checked against saved spectra; documented numerical settings",97.5,129.));
+    fig.labels.push(Label::new("Median of warmed calls on CPU 0; startup and HDF5 I/O excluded",97.5,133.));
+    fig.labels.push(Label::new("Outputs checked against saved spectra; documented numerical settings",97.5,140.));
     fig.save(root.join("figures/f_region_speed.svg"))?;
     fig.save(root.join("figures/f_region_speed.png"))?;
     Ok(())

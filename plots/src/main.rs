@@ -5,7 +5,7 @@ use hdf5::{File, types::VarLenUnicode};
 use rustplotlib::*;
 use std::{fs, path::Path};
 
-const NAMES: [&str; 11] = ["Analytic","Vierinen","Swoboda","Kinetic","Buchert","Virtanen","Martinez","Nicolls","Sandbem","Skolar","inscar"];
+const NAMES: [&str; 12] = ["Analytic","Vierinen","Swoboda","Kinetic","Buchert","Virtanen","Martinez","Nicolls","Sandbem","Skolar","inscar","EISCAT"];
 const COLORS: [&str; 4] = ["#245774","#8b3940","#4c7566","#ac792e"];
 
 fn main() -> Result<()> {
