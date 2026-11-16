@@ -39,6 +39,11 @@ def main():
                         with h5py.File(external) as e:
                             np.testing.assert_array_equal(e['frequency_hz'][:], h['frequency_hz'][:])
                             spectra['EISCAT'] = e['EISCAT/S_total'][:]
+                    external = ROOT / 'tables/rust' / path.name
+                    if 'Vierinen' not in spectra and external.exists():
+                        with h5py.File(external) as r:
+                            np.testing.assert_array_equal(r['frequency_hz'][:], h['frequency_hz'][:])
+                            spectra['Vierinen'] = r['Vierinen/S_total'][:]
                     for i, a in enumerate(NAMES):
                         for j in range(i + 1, len(NAMES)):
                             b = NAMES[j]

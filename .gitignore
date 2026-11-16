@@ -2,4 +2,5 @@ __pycache__/
 .DS_Store
 .cache/
 plots/target/
+rust/target/
 .latex-cache/

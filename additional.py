@@ -142,6 +142,9 @@ def collect():
     if (ROOT/'tables/eiscat').exists():
         from merge_eiscat import main as merge_eiscat
         merge_eiscat()
+    if (ROOT/'tables/rust').exists():
+        from merge_rust import main as merge_rust
+        merge_rust()
 
 
 if __name__=='__main__':

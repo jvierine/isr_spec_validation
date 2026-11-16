@@ -1,0 +1,17 @@
+[package]
+name = "isr-rust-validation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+errorfunctions = "0.2"
+num-complex = "0.4"
+libc = "0.2"
+guisdap-ion = { git = "https://github.com/jvierine/ruisdap", rev = "26e3e9544c16215e10f1891cc0c788871fce21b8" }
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

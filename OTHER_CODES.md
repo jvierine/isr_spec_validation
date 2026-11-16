@@ -6,6 +6,8 @@ scatter spectra; packages that only read or plot measured ISR data are excluded.
 
 **Execution status:** Buchert, Virtanen's R/C program, Nicolls, Skolar and inscar
 now have [numerical comparisons](README.md) and [documented adapters](NEW_CODES.md).
+The active Vierinen entry is the native RUISDAP Rust implementation, with
+AVX2 dispatch and f64 arithmetic; the earlier Python program is not benchmarked.
 Martinez, Sandbem and EISCAT GUISDAP9 now have measured comparisons from their
 original MATLAB sources run under GNU Octave on avaruus. Remaining entries are catalog only. Capabilities below describe
 the inspected implementation or its author's documentation, not verified accuracy.

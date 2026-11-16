@@ -19,6 +19,7 @@ A dash means no new refinement measurement in this run; it does not establish nu
 
 EISCAT: unsupported — EISCAT adapter evaluated collisionless unmagnetized cases only.
 Martinez: unsupported — The Octave adapter does not support this case physics.
+Vierinen: unsupported — Vierinen Rust supports unmagnetized or parallel Maxwellian spectra and BGK collisions; oblique magnetic cases are not evaluated.
 Virtanen: ['unsupported'] — ['No oblique magnetic response; parallel Maxwellian case is identical to the unmagnetized response.'].
 
 inscar independent checks: cutoff refinement 4.36e-14; DC-limit sensitivity 1.34e-13. The grid-refinement measurement is shown above.
@@ -40,6 +41,7 @@ A dash means no new refinement measurement in this run; it does not establish nu
 
 EISCAT: unsupported — EISCAT adapter evaluated collisionless unmagnetized cases only.
 Martinez: unsupported — The Octave adapter does not support this case physics.
+Vierinen: unsupported — Vierinen Rust supports unmagnetized or parallel Maxwellian spectra and BGK collisions; oblique magnetic cases are not evaluated.
 Virtanen: ['unsupported'] — ['No oblique magnetic response; parallel Maxwellian case is identical to the unmagnetized response.'].
 
 inscar independent checks: cutoff refinement 3.47e-14; DC-limit sensitivity 8.86e-14. The grid-refinement measurement is shown above.
@@ -62,6 +64,7 @@ A dash means no new refinement measurement in this run; it does not establish nu
 Buchert: unsupported — This interface has no electron-neutral BGK input.
 EISCAT: unsupported — EISCAT adapter evaluated collisionless unmagnetized cases only.
 Martinez: unsupported — The Octave adapter does not support this case physics.
+Vierinen: unsupported — Vierinen Rust supports unmagnetized or parallel Maxwellian spectra and BGK collisions; oblique magnetic cases are not evaluated.
 Virtanen: ['unsupported'] — ['No oblique magnetic response; parallel Maxwellian case is identical to the unmagnetized response.'].
 inscar: unsupported — The inspected collisional F function is not the number-conserving neutral BGK response tested here.
 

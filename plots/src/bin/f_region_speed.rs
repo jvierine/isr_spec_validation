@@ -24,7 +24,7 @@ fn main() -> Result<()> {
          g.attr("runtime").unwrap().read_scalar::<VarLenUnicode>().unwrap().as_str().to_string())
     }).collect();
     rows.sort_by(|a,b| a.1.total_cmp(&b.1));
-    let reference = h.group("Kinetic")?.attr("median_elapsed_s")?.read_scalar::<f64>()?;
+    let reference = h.group("Vierinen")?.attr("median_elapsed_s")?.read_scalar::<f64>()?;
     let mut fig = Figure::new(IntendedUse::Custom { width_mm: 195., font_pt: 9. });
     fig.height_mm = 145.;
     fig.labels.push(Label::new("Standard F-region O+ spectrum: execution time", 97.5, 6.));
@@ -33,17 +33,17 @@ fn main() -> Result<()> {
     let mut p = Panel::new(Rect::new(7., 26., 181., 101.), Axes::new([0.,1.],[0.,13.],"",""));
     p.axes_visible = false;
     let xx = [0.15,0.38,0.60,0.82];
-    for (j,head) in ["Implementation","Runtime","Median per spectrum","Kinetic / time"].iter().enumerate() {
+    for (j,head) in ["Implementation","Runtime","Median per spectrum","Time / Vierinen"].iter().enumerate() {
         p.label_at(*head,[xx[j],12.5]);
     }
     for (i,(name,median,min,max,runtime)) in rows.iter().enumerate() {
         let y = 11.5-i as f64;
         p.label_at(name.clone(),[xx[0],y]);
-        let label = match runtime.as_str() { "python"=>"Python", "r"=>"R/C", "julia"=>"Julia", "octave"=>"Octave", _=>runtime };
+        let label = match runtime.as_str() { "rust"=>"Rust (AVX2)", "python"=>"Python", "r"=>"R/C", "julia"=>"Julia", "octave"=>"Octave", _=>runtime };
         p.label_at(label,[xx[1],y]);
         p.label_at(elapsed(*median),[xx[2],y]);
-        let ratio=reference/median;
-        p.label_at(if ratio>=0.01 {format!("{ratio:.2}x")} else {format!("{ratio:.2e}x")},[xx[3],y]);
+        let ratio=median/reference;
+        p.label_at(if ratio<100. {format!("{ratio:.2}x")} else {format!("{ratio:.2e}x")},[xx[3],y]);
         let _ = (min,max); // full spread retained in the HDF5 product
         let mut line=Line::new(vec![[0.01,y-0.5],[0.99,y-0.5]],"#d9dfe2");
         line.width_pt=0.3; p.push(Layer::Line(line));

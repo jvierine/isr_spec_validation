@@ -108,6 +108,7 @@ def main():
            'Nearly coincident spectra are distinguished by the residuals. [Case details](COMPARISON_RESULTS.md#f-region-4402-mhz).','',
            'Twelve implementations evaluated across eleven prescribed Maxwellian tests. '
            'The Martinez, Sandbem and EISCAT GUISDAP MATLAB implementations run through GNU Octave. '
+           '**Vierinen is the native RUISDAP Rust calculator (f64, AVX2 on avaruus); Kinetic is the Python theoretical reference.** '
            'Each test has a spectrum overlay and a residual panel. Coverage differs where an adapter does not support the prescribed physics.','',
            '[Six ion-line tests and plots](COMPARISON_RESULTS.md) · [Five magnetic, collision and plasma-line tests and plots](EXTENDED_RESULTS.md)','',
            *quickstart_lines(),
@@ -132,12 +133,16 @@ def main():
             '## Standard F-region O⁺ spectrum speed','',
             'All twelve implementations were timed on avaruus for the same 440.2 MHz, 801-frequency F-region case. '
             'Each call used one pinned logical CPU, with startup, compilation and HDF5 I/O excluded. '
-            'The R/C result uses the median of seven 100-call batches; the other results use medians of seven warmed calls. '
+            'Rust uses 31 batches of 100 calls with alternating original/optimized Rust order and thread CPU measurements. '
+            'The R/C result uses seven 100-call batches; the other results use seven warmed calls. '
             'Each output was checked against its saved comparison spectrum. Different numerical algorithms and refinement settings '
             'affect these times, so speed alone does not measure accuracy.','',
             '![Standard F-region spectrum speed for all twelve implementations](figures/f_region_speed.png)','',
             '[Vector speed table](figures/f_region_speed.svg) · [Times and provenance in HDF5](tables/speed_standard_f_region.h5) · '
             '[Reproduce the benchmark](NEW_CODES.md#standard-f-region-speed-benchmark)','',
+            'The optimized Vierinen Rust kernel is the fastest in this measured table. The mixed f32 arithmetic trial '
+            'was slower on this O⁺ case and exceeded the 10⁻⁶ tolerance on the plasma-line case, so the selected implementation uses f64. '
+            'The paired Rust timings and precision-trial arrays are retained in [HDF5](tables/rust/).','',
             '## Timing across cases','','The thirteen-case timing table covers Analytic, Kinetic, Martinez and Sandbem. '
             'Those results are medians of seven warmed calls on one pinned avaruus logical CPU; '
             'startup and HDF5 I/O are excluded.','',

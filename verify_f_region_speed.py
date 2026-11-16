@@ -19,13 +19,16 @@ def main():
         for name in ORDER:
             g = h[name]
             times = g['elapsed_s'][:]
-            assert len(times) == 7 and np.isfinite(times).all() and (times > 0).all()
+            assert len(times) == (31 if name=='Vierinen' else 7)
+            assert np.isfinite(times).all() and (times > 0).all()
             np.testing.assert_allclose(np.median(times), g.attrs['median_elapsed_s'], rtol=1e-12)
             np.testing.assert_allclose(times.min(), g.attrs['min_elapsed_s'], rtol=1e-12)
             np.testing.assert_allclose(times.max(), g.attrs['max_elapsed_s'], rtol=1e-12)
             assert g.attrs['error_vs_saved'] <= 1e-6, name
             assert len(g.attrs['git_commit']) == 40 and len(g.attrs['code_sha256']) == 64, name
             assert name in spectra and 'S_total' in spectra[name]
+        assert h['Vierinen'].attrs['runtime']=='rust'
+        assert h['Vierinen'].attrs['median_elapsed_s'] < min(h[n].attrs['median_elapsed_s'] for n in ORDER if n!='Vierinen')
         ref = h['Kinetic'].attrs['median_elapsed_s']
         for name in ORDER:
             np.testing.assert_allclose(h[name].attrs['speed_relative_to_kinetic'],

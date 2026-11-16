@@ -15,14 +15,18 @@ the adapter selects the source's pure MATLAB spectrum branch.
 
 The six existing unmagnetized ion-line cases and five existing extended cases
 are reused without changing plasma parameters, mass definitions or frequency
-samples. Original four-code arrays are copied exactly, selecting the configured
-`refined` group for extended tests. New programs contribute total spectra;
+samples. Analytic, Swoboda and Kinetic arrays are copied exactly, selecting the
+configured `refined` group for extended tests. **Vierinen now means the native
+RUISDAP Rust implementation**, not the earlier Python calculator. Its original
+Python results remain only in the original archived comparison products.
+New programs contribute total spectra;
 their ion/electron components are not fabricated. All data products are HDF5.
 
 ## Implementations and scope
 
 | Label | Pinned implementation | Cases evaluated | Exclusions in these adapters |
 |---|---|---:|---|
+| Vierinen | [RUISDAP Rust](https://github.com/jvierine/ruisdap/tree/26e3e9544c16215e10f1891cc0c788871fce21b8/crates/guisdap-ion) | 8 | Unmagnetized Maxwellians and BGK collisions; parallel B uses its exact B=0 limit. Oblique magnetic cases are unsupported. |
 | Buchert | [IncoherentScatter.jl](https://github.com/stephancb/IncoherentScatter.jl/tree/640110f6f7f2b3652498f18028ed4b8c9e03daeb) | 9 | No electron-neutral BGK input in the interface used here. |
 | Virtanen | [ISspectrum R/C](https://github.com/ilkkavir/ISspectrum/tree/28458b2cefcce247e010a0f2555a934a051927a4) | 8 | No oblique magnetic response; a parallel Maxwellian response equals the unmagnetized response. |
 | Nicolls | [ISR-school ISspec](https://github.com/isrsummerschool/lecture_supplements_2024/tree/5f02f3edaf09cc5b3f03617f50e9412ec12df4bd/is_spectral_model) | 11 | Coulomb collisions disabled, consistent with these tests. |
@@ -51,6 +55,19 @@ names are retained in [HDF5](tables/pairwise_summary.h5).
 Every output is a PSD per electron per Hz. The conversions below are fixed
 before comparison; no peak, area, amplitude or frequency is fitted. Source
 checkouts exactly match the listed commits. Compatibility changes are confined to adapters.
+
+**Vierinen (Rust).** Invoke SpectrumModel.evaluate in the native guisdap-ion
+crate with physical SI inputs and amu ion masses. Its total spectrum is already
+per electron per Hz. It computes the electron and all ion response terms; no
+noise component is removed. Thermal widths and susceptibility factors are
+prepared once per spectrum call. Collisionless real arguments use Gaussian
+and scaled Dawson functions directly. Single-ion cases dispatch to four-lane
+AVX2 algebra on supported x86 CPUs, with a scalar fallback and scalar tail.
+The special functions remain f64. Collisional cases retain the original
+complex BGK response. No interpolation, peak normalization, enforced symmetry,
+or extra broadening is introduced. Reference-response, normalization, drift,
+composition, short-grid/tail and fit-recovery tests pass. This implementation
+does not evaluate oblique magnetic response; unsupported cases are explicit.
 
 **Buchert.** Invoke native `ScatterVolume`, `Ion`, `Plasma` and `pwrspec` with
 `system=1/pi`, then divide by ne. This removes the native system factor and
@@ -129,10 +146,32 @@ The measured distributions, runtimes, source identity and settings are in
 numerical settings; speed comparisons do not by themselves establish equal
 accuracy.
 
+Vierinen Rust is measured in 31 alternating batches of 100 original and
+optimized Rust calls after ten warm-up calls, with the returned allocation,
+state validation, width preparation and complete 801-point calculation inside
+each timed call. Both thread CPU time and wall time are retained. Its original
+Rust source snapshot is included solely as the paired performance and numerical
+baseline; the Python Vierinen calculator is not benchmarked. The Rust runner
+uses a pinned Git dependency, release mode, thin LTO, one codegen unit, and
+runtime AVX2 dispatch with a portable compilation target. The test of the
+AVX2 path against the optimized scalar path measured a further 1.12x gain.
+
+The mixed f32 experiment used f32 thermal widths, Gaussian evaluation, and
+spectrum algebra, with the existing f64 Dawson function rounded to f32.
+For the standard O+ case it was slower than optimized f64 (about 55 versus
+50 microseconds). Its spectrum error was 4.84e-7 there, but 1.02e-3 on the
+plasma-line case and 1.27e-5 on the unmagnetized edge-case control. It is not
+selected. Its timing samples and spectra are retained alongside the f64 data
+in tables/rust. This trial does not establish that every possible f32
+implementation would have the same speed or error.
+
 To reproduce on avaruus after preparing the pinned source checkouts and
 installing the runtimes and Python dependencies:
 
 ```sh
+cargo build --release --locked --manifest-path rust/Cargo.toml
+.venv/bin/python rust_validation.py
+conda run -n base python merge_rust.py
 .venv/bin/python benchmark_f_region.py
 mkdir -p .cache/virtanen-native
 cc -O2 -shared -fPIC .cache/ISspectrum/src/spec_worker.c .cache/ISspectrum/src/transf_worker.c -lm -o .cache/virtanen-native/ISspectrum.so

@@ -19,7 +19,7 @@ for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS', 'MKL_NUM_THREADS',
 import h5py
 import numpy as np
 
-from compare import ROOT, error, ours, load_juha, vierinen, swoboda
+from compare import ROOT, error, ours, swoboda
 from call_settings import run_analytic
 from additional_python import nicolls, skolar, inscar
 
@@ -34,13 +34,11 @@ def main():
         case['frequency_hz'] = h['frequency_hz'][:]
         saved = {name: h[name + '/S_total'][:] for name in h['code_names'].asstr()[:]}
 
-    juha = load_juha(ROOT / '.cache/vierinen/isr_spec.py')
     sys.path.insert(0, str(ROOT / '.cache/swoboda'))
     from ISRSpectrum.ISRSpectrum import Specinit
 
     runners = {
         'Analytic': lambda: run_analytic(case)[-1],
-        'Vierinen': lambda: vierinen(juha, case, 20000)[-1],
         'Swoboda': lambda: swoboda(Specinit, case)[-1],
         'Kinetic': lambda: ours(case)[-1],
         'Nicolls': lambda: nicolls(case, True),
@@ -80,7 +78,6 @@ def main():
             g.attrs['error_vs_saved'] = discrepancy
             g.attrs['source_sha256'] = hashlib.sha256((ROOT / {
                 'Analytic': 'calculate.py', 'Kinetic': 'models/kinetic.py',
-                'Vierinen': '.cache/vierinen/isr_spec.py',
                 'Swoboda': '.cache/swoboda/ISRSpectrum/ISRSpectrum.py',
                 'Nicolls': '.cache/isr_school/is_spectral_model/ismodel.py',
                 'Skolar': '.cache/OO_Collisions/ISRSpectraFunctions.py',

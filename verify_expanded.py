@@ -7,10 +7,12 @@ import numpy as np
 from compare import ROOT, error
 from additional import cases
 from additional_sources import record
+from rust_validation import pinned_source
 
 
 def main():
-    counts={n:0 for n in ['Buchert','Virtanen','Martinez','Nicolls','Sandbem','Skolar','inscar','EISCAT']}
+    counts={n:0 for n in ['Buchert','Virtanen','Martinez','Nicolls','Sandbem','Skolar','inscar','EISCAT','Vierinen']}
+    rust_source,rust_commit=pinned_source()
     for category,oldpath,case in cases():
         path=ROOT/'tables/expanded'/oldpath.name
         with h5py.File(path) as h,h5py.File(oldpath) as old:
@@ -23,7 +25,20 @@ def main():
                 assert a.shape==h['frequency_hz'].shape and np.isfinite(a).all()
                 assert a.min()>=-1e-12*a.max(),(path,name)
                 np.testing.assert_equal(error(a,a[::-1]),g.attrs['symmetry_error'])
-                if name in origin:
+                if name=='Vierinen':
+                    counts[name]+=1
+                    assert g.attrs['implementation']=='RUISDAP Rust'
+                    assert g.attrs['host']=='avaruus' and g.attrs['threads_per_call']==1
+                    assert len(g['elapsed_s'])==31 and g.attrs['median_elapsed_s']>0
+                    assert g.attrs['git_commit']==rust_commit
+                    assert g.attrs['code_sha256']==hashlib.sha256(rust_source.read_bytes()).hexdigest()
+                    assert g.attrs['adapter_sha256']==hashlib.sha256((ROOT/'rust/src/main.rs').read_bytes()).hexdigest()
+                    assert g.attrs['max_relative_change']<=1e-9
+                    assert g.attrs['error_vs_kinetic']<=1e-6
+                    assert case['B']==0 or case['theta'] in (0,180)
+                    with h5py.File(ROOT/'tables/rust'/path.name) as measured:
+                        np.testing.assert_array_equal(a,measured['Vierinen/S_total'][:])
+                elif name in origin:
                     np.testing.assert_array_equal(a,origin[name+'/S_total'][:])
                 else:
                     counts[name]+=1
@@ -69,7 +84,7 @@ def main():
             figure=ROOT/'figures'/(oldpath.stem+'.'+ext)
             assert figure.stat().st_size>1000,figure
         print(oldpath.stem,'arrays, provenance, metrics and figures verified')
-    assert counts=={'Buchert':9,'Virtanen':8,'Martinez':7,'Nicolls':11,'Sandbem':11,'Skolar':7,'inscar':5,'EISCAT':7},counts
+    assert counts=={'Buchert':9,'Virtanen':8,'Martinez':7,'Nicolls':11,'Sandbem':11,'Skolar':7,'inscar':5,'EISCAT':7,'Vierinen':8},counts
     print('Coverage:',counts)
 
 
